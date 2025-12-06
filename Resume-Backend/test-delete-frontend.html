@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DELETE Endpoint Test - Resume Backend</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 30px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .section h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .status.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e4e8;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .log {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 15px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .log-entry {
+      margin-bottom: 8px;
+      padding: 4px 0;
+    }
+
+    .log-success { color: #4ec9b0; }
+    .log-error { color: #f48771; }
+    .log-info { color: #9cdcfe; }
+    .log-warning { color: #dcdcaa; }
+
+    .created-resume {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      border: 2px solid #28a745;
+    }
+
+    .created-resume h3 {
+      color: #28a745;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .resume-id {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #667eea;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗑️ DELETE Endpoint Tester</h1>
+    <p class="subtitle">Test the DELETE /api/resumes/:id endpoint</p>
+
+    <div id="serverStatus" class="status info">
+      ⏳ Checking server status...
+    </div>
+
+    <!-- Section 1: Create Test Resume -->
+    <div class="section">
+      <h2>Step 1: Create Test Resume</h2>
+      <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+        First, create a test resume to get a valid ID for deletion testing.
+      </p>
+      <button class="btn-success" onclick="createTestResume()">
+        ➕ Create Test Resume
+      </button>
+      <div id="createResult"></div>
+    </div>
+
+    <!-- Section 2: Delete Resume -->
+    <div class="section">
+      <h2>Step 2: Delete Resume</h2>
+      <div class="input-group">
+        <label for="resumeId">Resume ID:</label>
+        <input 
+          type="text" 
+          id="resumeId" 
+          placeholder="Enter resume ID (24 character MongoDB ObjectId)"
+          pattern="[a-fA-F0-9]{24}"
+        >
+      </div>
+      <div class="quick-actions">
+        <button class="btn-danger" onclick="deleteResume()">
+          🗑️ Delete Resume
+        </button>
+        <button class="btn-warning" onclick="testInvalidId()">
+          ⚠️ Test Invalid ID
+        </button>
+        <button class="btn-info" onclick="testNonExistent()">
+          🔍 Test Non-Existent
+        </button>
+      </div>
+      <div id="deleteResult"></div>
+    </div>
+
+    <!-- Section 3: Console Log -->
+    <div class="section">
+      <h2>Console Log</h2>
+      <button class="btn-primary" onclick="clearLog()" style="margin-bottom: 10px;">
+        🧹 Clear Log
+      </button>
+      <div id="log" class="log"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000';
+    let createdResumeId = null;
+
+    // Log function
+    function log(message, type = 'info') {
+      const logDiv = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${type}`;
+      entry.textContent = `[${timestamp}] ${message}`;
+      logDiv.appendChild(entry);
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+      log('Log cleared', 'info');
+    }
+
+    // Show status message
+    function showStatus(elementId, message, type) {
+      const element = document.getElementById(elementId);
+      element.className = `status ${type}`;
+      element.innerHTML = message;
+    }
+
+    // Check server health on load
+    async function checkServerHealth() {
+      try {
+        log('Checking server health...', 'info');
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          showStatus('serverStatus', `✅ Server is running | Database: ${data.database}`, 'success');
+          log('Server is running and healthy', 'success');
+          return true;
+        } else {
+          throw new Error('Server responded with error');
+        }
+      } catch (error) {
+        showStatus('serverStatus', '❌ Server is not responding! Make sure backend is running on port 5000', 'error');
+        log(`Error: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // Create test resume
+    async function createTestResume() {
+      const resultDiv = document.getElementById('createResult');
+      resultDiv.innerHTML = '<div class="status info">⏳ Creating test resume...</div>';
+      
+      log('Creating test resume...', 'info');
+      
+      const testData = {
+        name: 'Test User - DELETE Test',
+        email: `test.delete.${Date.now()}@example.com`,
+        phone: '+1-555-TEST',
+        summary: 'This is a test resume for DELETE endpoint testing'
+      };
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/resumes`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(testData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          createdResumeId = data.data.resume._id;
+          document.getElementById('resumeId').value = createdResumeId;
+          
+          resultDiv.innerHTML = `
+            <div class="created-resume">
+              <h3>✅ Test Resume Created Successfully!</h3>
+              <p style="margin-bottom: 10px; color: #666;">Resume ID:</p>
+              <div class="resume-id">${createdResumeId}</div>
+              <p style="margin-top: 10px; color: #666; font-size: 12px;">
+                ID has been copied to the delete field below. You can now test deletion.
+              </p>
+            </div>
+          `;
+          
+          log(`Resume created successfully with ID: ${createdResumeId}`, 'success');
+        } else {
+          throw new Error(data.message || 'Failed to create resume');
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+        log(`Failed to create resume: ${error.message}`, 'error');
+      }
+    }
+
+    // Delete resume
+    async function deleteResume() {
+      const resumeId = document.getElementById('resumeId').value.trim();
+      const resultDiv = document.getElementById('deleteResult');
+      
+      if (!resumeId) {
+        resultDiv.innerHTML = '<div class="status error">❌ Please enter a resume ID</div>';
+        log('Delete failed: No resume ID provided', 'error');
+        return;
+      }
+      
+      // Validate ID format
+      if (!/^[a-fA-F0-9]{24}$/.test(resumeId)) {
+        resultDiv.innerHTML = '<div class="status error">❌ Invalid ID format. Must be 24 hexadecimal characters.</div>';
+        log('Delete failed: Invalid ID format', 'error');
+        return;
+      }
+      
+      resultDiv.innerHTML = '<div class="status info">⏳ Deleting resume...</div>';
+      log(`Attempting to delete resume: ${resumeId}`, 'info');
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/resumes/${resumeId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok && response.status === 0) {
+          throw new Error('ERR_INTERNET_DISCONNECTED - Backend dropped connection');
+        }
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          resultDiv.innerHTML = `
+            <div class="status success">
+              ✅ Resume deleted successfully!<br>
+              <small>Status: ${response.status} | Message: ${data.message}</small>
+            </div>
+          `;
+          log(`Resume deleted successfully: ${resumeId}`, 'success');
+          log(`Response: ${JSON.stringify(data)}`, 'info');
+          document.getElementById('resumeId').value = '';
+        } else if (response.status === 404) {
+          resultDiv.innerHTML = `<div class="status warning">⚠️ Resume not found (404)</div>`;
+          log(`Resume not found: ${resumeId}`, 'warning');
+        } else if (response.status === 400) {
+          resultDiv.innerHTML = `<div class="status error">❌ ${data.message}</div>`;
+          log(`Bad request: ${data.message}`, 'error');
+        } else {
+          throw new Error(data.message || 'Delete failed');
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="status error">
+            ❌ <strong>DELETE REQUEST FAILED!</strong><br><br>
+            Error: ${error.message}<br><br>
+            <strong>This is the issue you're experiencing!</strong><br><br>
+            Possible causes:<br>
+            • Backend server crashed or stopped<br>
+            • Database connection lost<br>
+            • Port 5000 is not accessible<br><br>
+            Check backend console for errors.
+          </div>
+        `;
+        log(`DELETE FAILED: ${error.message}`, 'error');
+        
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          log('Backend is not responding - server may be down', 'error');
+        }
+      }
+    }
+
+    // Test with invalid ID
+    async function testInvalidId() {
+      document.getElementById('resumeId').value = '123invalid';
+      log('Testing with invalid ID format: 123invalid', 'warning');
+      await deleteResume();
+    }
+
+    // Test with non-existent ID
+    async function testNonExistent() {
+      document.getElementById('resumeId').value = '507f1f77bcf86cd799439011';
+      log('Testing with non-existent but valid ID', 'warning');
+      await deleteResume();
+    }
+
+    // Check server health on page load
+    window.addEventListener('load', () => {
+      checkServerHealth();
+      log('DELETE endpoint tester loaded', 'info');
+      log('Make sure your backend is running on http://localhost:5000', 'info');
+    });
+  </script>
+</body>
+</html>
+

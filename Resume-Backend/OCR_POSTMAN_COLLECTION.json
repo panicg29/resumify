@@ -1,0 +1,371 @@
+{
+  "info": {
+    "name": "OCR API - Resume Backend",
+    "description": "Postman collection for OCR API endpoints. Tests file upload and URL-based OCR processing using OCR.Space API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/ocr/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "health"]
+        },
+        "description": "Check OCR service health and verify API key is configured"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - Basic Upload",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Upload a file (image or PDF) for OCR text extraction with default settings"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - With Language",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "language",
+              "value": "eng",
+              "type": "text",
+              "description": "Language code: eng, fra, deu, spa, etc."
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Upload file with specific language setting"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - With All Options",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "language",
+              "value": "eng",
+              "type": "text"
+            },
+            {
+              "key": "OCREngine",
+              "value": "2",
+              "type": "text",
+              "description": "OCR Engine: 1 or 2"
+            },
+            {
+              "key": "detectOrientation",
+              "value": "true",
+              "type": "text",
+              "description": "Auto-detect orientation"
+            },
+            {
+              "key": "scale",
+              "value": "false",
+              "type": "text",
+              "description": "Scale image"
+            },
+            {
+              "key": "isCreateSearchablePdf",
+              "value": "false",
+              "type": "text",
+              "description": "Create searchable PDF"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Upload file with all available OCR options"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - Error: No File",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Test error handling when no file is uploaded"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - Basic",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://example.com/document.pdf\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"]
+        },
+        "description": "Process OCR on a remote file URL with default settings"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - With Language",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://example.com/document.pdf\",\n  \"language\": \"eng\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"]
+        },
+        "description": "Process URL with specific language setting"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - With All Options",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://example.com/document.pdf\",\n  \"language\": \"eng\",\n  \"OCREngine\": 2,\n  \"detectOrientation\": true,\n  \"scale\": false,\n  \"isCreateSearchablePdf\": false,\n  \"isSearchablePdfHideTextLayer\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"]
+        },
+        "description": "Process URL with all available OCR options"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - Error: Missing URL",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"]
+        },
+        "description": "Test error handling when URL is missing"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - Error: Invalid URL",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"not-a-valid-url\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"]
+        },
+        "description": "Test error handling with invalid URL format"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR URL - Different Languages",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://example.com/document.pdf\",\n  \"language\": \"fra\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/url?language=fra",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "url"],
+          "query": [
+            {
+              "key": "language",
+              "value": "fra"
+            }
+          ]
+        },
+        "description": "Test with French language (can be changed to: ara, chi_sim, chi_tra, deu, fra, jpn, kor, por, rus, spa, hin, ben)"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - Different Image Formats",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Upload: JPEG, PNG, GIF, BMP, or TIFF image"
+            },
+            {
+              "key": "language",
+              "value": "eng",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Test OCR with different image formats (JPEG, PNG, GIF, BMP, TIFF)"
+      },
+      "response": []
+    },
+    {
+      "name": "OCR File - PDF Document",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Upload a PDF document"
+            },
+            {
+              "key": "language",
+              "value": "eng",
+              "type": "text"
+            },
+            {
+              "key": "isCreateSearchablePdf",
+              "value": "true",
+              "type": "text",
+              "description": "Create searchable PDF output"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/ocr/file",
+          "host": ["{{base_url}}"],
+          "path": ["api", "ocr", "file"]
+        },
+        "description": "Test OCR on PDF document with searchable PDF creation"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}
+
