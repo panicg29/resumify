@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AnimatedButton from '../react-bits/AnimatedButton';
 import { Input } from '../ui/input';
 import AnimatedText from '../react-bits/AnimatedText';
+import { API_ROOT } from '../../services/resumeApi';
 
 export default function FooterSection() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function FooterSection() {
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/email/send-greeting', {
+      const response = await fetch(`${API_ROOT}/api/email/send-greeting`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

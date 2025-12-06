@@ -1,17 +1,29 @@
 // Compute API base dynamically to avoid localhost/127.0.0.1 mismatches and allow env overrides
-let API_ROOT = 'http://localhost:5000';
+let API_ROOT = 'https://resumify-backend-8wol.onrender.com';
 let API_BASE_URL = `${API_ROOT}/api/resumes`;
 try {
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
   let env;
   try { env = import.meta.env; } catch (_) { env = undefined; }
-  const host = (env && env.VITE_API_HOST) || hostname || 'localhost';
-  const port = (env && env.VITE_API_PORT) || '5000';
-  API_ROOT = `http://${host}:${port}`;
+  
+  // Allow full URL override via environment variable
+  if (env && env.VITE_API_BASE_URL) {
+    API_ROOT = env.VITE_API_BASE_URL;
+  } else if (env && env.VITE_API_HOST) {
+    // Support legacy host/port configuration for local development
+    const host = env.VITE_API_HOST;
+    const port = env.VITE_API_PORT;
+    const protocol = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
+    // Only append port if explicitly provided (for localhost development)
+    API_ROOT = port ? `${protocol}://${host}:${port}` : `${protocol}://${host}`;
+  }
+  
   API_BASE_URL = `${API_ROOT}/api/resumes`;
 } catch (_) {
   // ignore and keep default
 }
+
+// Export API_ROOT so other files can reuse it
+export { API_ROOT };
 
 // Small resilience wrapper: timeout + one retry for transient network hiccups
 async function fetchWithResilience(input, init = {}, { timeoutMs = 8000, retries = 1, backoffMs = 400 } = {}) {
@@ -168,7 +180,7 @@ const resumeApi = {
 
   /**
    * Delete resume by ID
-   * Following guide: DELETE http://localhost:5000/api/resumes/:id
+   * Following guide: DELETE {API_ROOT}/api/resumes/:id
    * @param {String} id - Resume ID (24-character MongoDB ObjectId)
    * @returns {Promise<Object>} {success: true/false, message: "...", data: {...}}
    */
@@ -364,7 +376,7 @@ const resumeApi = {
         requestBody.template = template;
       }
 
-      const API_URL = `http://localhost:5000/api/ai/update-resume/${id}`;
+      const API_URL = `${API_ROOT}/api/ai/update-resume/${id}`;
       const response = await fetchWithResilience(API_URL, {
         method: 'PUT',
         headers: {
@@ -405,7 +417,7 @@ const resumeApi = {
         throw new Error('Invalid resume ID format. Must be a valid MongoDB ObjectId.');
       }
 
-      const API_URL = `http://localhost:5000/api/ai/analyze-resume/${id}`;
+      const API_URL = `${API_ROOT}/api/ai/analyze-resume/${id}`;
       const response = await fetchWithResilience(API_URL, {
         method: 'GET',
         headers: {

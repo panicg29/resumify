@@ -22,6 +22,7 @@ import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
+import { API_ROOT } from '../services/resumeApi';
 
 export default function PdfUpload() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function PdfUpload() {
   const [selectedTemplate, setSelectedTemplate] = useState('korina-villanueva'); // Default template
   const [previewTemplate, setPreviewTemplate] = useState(null);
 
-  const API_ENDPOINT = 'http://localhost:5000/api/ocr/file';
+  const API_ENDPOINT = `${API_ROOT}/api/ocr/file`;
 
   const templates = [
     { id: 'korina-villanueva', name: 'Korina Villanueva', color: 'from-amber-600 to-amber-800', desc: 'Elegant two-column with light beige sidebar' },
@@ -272,7 +273,7 @@ export default function PdfUpload() {
       // Handle network errors
       if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
         const errorMsg = `Cannot connect to backend. Backend might be:
-1) Not running at http://localhost:5000
+1) Not running at ${API_ROOT}
 2) Missing route: POST /api/ocr/file
 3) CORS not configured for POST requests
 4) Crashing when receiving the request
