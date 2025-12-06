@@ -1,0 +1,14 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="resumifyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5227FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF9FFC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B19EEF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="36" height="36" rx="8" fill="url(#resumifyGradient)"/>
+  <!-- FileText icon from Lucide style -->
+  <path d="M14.5 8h-3a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V13.5L19.5 8h-5z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M19.5 8v5.5h5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M12 15h8M12 19h8M12 23h5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
