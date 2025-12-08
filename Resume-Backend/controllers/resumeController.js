@@ -16,7 +16,8 @@ const createResume = async (req, res) => {
       experience,
       skills,
       projects,
-      template
+      template,
+      pageCount
     } = req.body;
 
     // Validate required fields
@@ -43,7 +44,8 @@ const createResume = async (req, res) => {
       experience: filteredExperience,
       skills: filteredSkills,
       projects: filteredProjects,
-      template: template || 'template1'
+      template: template || 'template1',
+      pageCount: pageCount || 1
     });
 
     await resume.save();
