@@ -24,7 +24,6 @@ import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
-import DynamicMultiPageTemplate from '../components/templates/DynamicMultiPageTemplate';
 import { generatePDF } from '../utils/pdfGenerator';
 import resumeApi from '../services/resumeApi';
 import AnalyticsModal from '../components/AnalyticsModal';
@@ -321,7 +320,6 @@ export default function Dashboard() {
         email: resume.email,
         phone: resume.phone,
         summary: resume.summary,
-        location: resume.location || '',
         education: (resume.education || []).map(edu => ({
           ...edu,
           year: edu.year // Keep as number or convert if needed
@@ -340,8 +338,7 @@ export default function Dashboard() {
             : (typeof proj.technologies === 'string' 
               ? proj.technologies.split(',').map(t => t.trim()).filter(t => t)
               : [])
-        })),
-        pageCount: resume.pageCount || 1
+        }))
       };
 
       // Render the template (we'll use a simple approach)
@@ -354,12 +351,7 @@ export default function Dashboard() {
       // Determine template component
       // Normalize template value (trim whitespace, handle null/undefined)
       const templateValue = resume.template;
-      let normalizedTemplate = templateValue ? String(templateValue).trim() : null;
-      
-      // If pageCount > 1, force dynamic-multi-page template
-      if (resume.pageCount && resume.pageCount > 1) {
-        normalizedTemplate = 'dynamic-multi-page';
-      }
+      const normalizedTemplate = templateValue ? String(templateValue).trim() : null;
       
       // Template is normalized and ready for use
       
@@ -404,8 +396,6 @@ export default function Dashboard() {
         TemplateComponent = OliviaWilsonDarkBlueTemplate;
       } else if (normalizedTemplate === 'phylis-flex') {
         TemplateComponent = PhylisFlexTemplate;
-      } else if (normalizedTemplate === 'dynamic-multi-page') {
-        TemplateComponent = DynamicMultiPageTemplate;
       } else {
         // Default fallback to isabel-schumacher if template is missing or invalid
         // This handles cases where old resumes don't have a template field
@@ -484,7 +474,6 @@ export default function Dashboard() {
       email: resume.email,
       phone: resume.phone,
       summary: resume.summary,
-      location: resume.location || '',
       education: (resume.education || []).map(edu => ({
         ...edu,
         year: edu.year // Keep as number or convert if needed
@@ -503,18 +492,12 @@ export default function Dashboard() {
           : (typeof proj.technologies === 'string' 
             ? proj.technologies.split(',').map(t => t.trim()).filter(t => t)
             : [])
-      })),
-      pageCount: resume.pageCount || 1
+      }))
     };
 
     // Use the appropriate template based on resume.template field
     // Normalize template value (trim whitespace, handle null/undefined)
-    let normalizedTemplate = templateValue ? String(templateValue).trim() : null;
-    
-    // If pageCount > 1, force dynamic-multi-page template
-    if (resume.pageCount && resume.pageCount > 1) {
-      normalizedTemplate = 'dynamic-multi-page';
-    }
+    const normalizedTemplate = templateValue ? String(templateValue).trim() : null;
     
     let TemplateComponent;
     if (normalizedTemplate === 'isabel-schumacher-glass') {
@@ -557,8 +540,6 @@ export default function Dashboard() {
       TemplateComponent = OliviaWilsonDarkBlueTemplate;
     } else if (normalizedTemplate === 'phylis-flex') {
       TemplateComponent = PhylisFlexTemplate;
-    } else if (normalizedTemplate === 'dynamic-multi-page') {
-      TemplateComponent = DynamicMultiPageTemplate;
     } else {
       // Default fallback to isabel-schumacher if template is missing or invalid
       // This handles cases where old resumes don't have a template field
@@ -1023,7 +1004,7 @@ export default function Dashboard() {
             
             {/* Modal Content */}
             <div className="p-8 bg-black overflow-auto max-h-[calc(95vh-100px)]">
-              <div className="bg-white rounded-lg shadow-2xl mx-auto" style={{maxWidth: '21cm'}}>
+              <div className="bg-white rounded-lg shadow-2xl overflow-hidden mx-auto" style={{maxWidth: '21cm'}}>
                 {(() => {
                   // Use editableData if in edit mode, otherwise use selectedResume
                   // But ensure template is always present

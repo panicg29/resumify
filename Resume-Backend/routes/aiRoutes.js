@@ -325,20 +325,16 @@ router.post('/process-pdf-complete', upload.single('pdf'), async (req, res) => {
 
     console.log(`Processing PDF: ${req.file.originalname}${userId ? ` for user: ${userId}` : ' (no userId)'}`);
 
-    // Step 1: Extract text from PDF and get page count
+    // Step 1: Extract text from PDF
     const dataBuffer = fs.readFileSync(filePath);
     let extractedText = '';
-    let pageCount = 1;
 
     try {
       const pdfData = await pdfParse(dataBuffer);
       extractedText = pdfData.text || '';
-      pageCount = pdfData.numpages || 1;
-      console.log(`PDF has ${pageCount} page(s)`);
     } catch (error) {
       console.log('PDF parsing failed:', error.message);
       extractedText = '';
-      pageCount = 1;
     }
 
     // If no text extracted, try AWS Textract
@@ -348,11 +344,6 @@ router.post('/process-pdf-complete', upload.single('pdf'), async (req, res) => {
         try {
           const textractResult = await processDocument(filePath, false);
           extractedText = textractResult.text || '';
-          // Update page count from Textract if available
-          if (textractResult.pageCount && textractResult.pageCount > 0) {
-            pageCount = textractResult.pageCount;
-            console.log(`Textract detected ${pageCount} page(s)`);
-          }
         } catch (textractError) {
           console.error('AWS Textract extraction failed:', textractError.message);
         }
@@ -406,8 +397,7 @@ router.post('/process-pdf-complete', upload.single('pdf'), async (req, res) => {
       skills: parsedData.skills || [],
       projects: parsedData.projects || [],
       userId: userId || null,
-      template: template || 'dynamic-multi-page',
-      pageCount: pageCount
+      template: template || 'template1'
     };
 
     console.log('Prepared resume data:', {
