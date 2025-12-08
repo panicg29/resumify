@@ -115,6 +115,11 @@ const resumeSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: 'template1'
+  },
+  pageCount: {
+    type: Number,
+    default: 1,
+    min: 1
   }
 }, {
   timestamps: true
