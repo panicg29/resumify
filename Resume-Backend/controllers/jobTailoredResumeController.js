@@ -151,8 +151,7 @@ const generateJobAlignedResume = async (req, res) => {
       ),
       skills: filterSkills(aiResume.skills && aiResume.skills.length ? aiResume.skills : baseResume.skills),
       projects: filterProjects(aiResume.projects && aiResume.projects.length ? aiResume.projects : baseResume.projects),
-      template: template || aiResume.template || baseResume.template || 'template1',
-      pageCount: baseResume.pageCount || 1
+      template: template || aiResume.template || baseResume.template || 'template1'
     };
 
     const resume = new Resume(resumePayload);
