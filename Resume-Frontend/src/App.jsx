@@ -11,6 +11,7 @@ import PdfUpload from './pages/PdfUpload.jsx';
 import AIGenerateResume from './pages/AIGenerateResume.jsx';
 import JobTailoredResume from './pages/JobTailoredResume.jsx';
 import InterviewPrep from './pages/InterviewPrep.jsx';
+import CustomTemplateEditor from './pages/CustomTemplateEditor.jsx';
 
 // Landing Page Components
 import LandingHeader from './components/landing/LandingHeader';
@@ -86,6 +87,7 @@ function AppRoutes() {
         <Route path="/ai-generate" element={<AIGenerateResume />} />
         <Route path="/job-tailored" element={<JobTailoredResume />} />
         <Route path="/interview-prep" element={<InterviewPrep />} />
+        <Route path="/custom-template" element={<CustomTemplateEditor />} />
       </Routes>
     </Router>
   );

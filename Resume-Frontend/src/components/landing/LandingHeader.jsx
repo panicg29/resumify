@@ -9,6 +9,7 @@ const navItems = [
   { label: 'Interview Prep', href: '/interview-prep' },
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Upload PDF', href: '/upload-pdf' },
+  { label: 'Custom Template', href: '/custom-template' },
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
 ];
