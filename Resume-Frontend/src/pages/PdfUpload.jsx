@@ -22,6 +22,10 @@ import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
+import MultiPageTemplate1 from '../components/templates/MultiPageTemplate1';
+import MultiPageTemplate2 from '../components/templates/MultiPageTemplate2';
+import MultiPageTemplate3 from '../components/templates/MultiPageTemplate3';
+import { distributeContent } from '../utils/contentDistributor';
 import { API_ROOT } from '../services/resumeApi';
 
 export default function PdfUpload() {
@@ -33,10 +37,11 @@ export default function PdfUpload() {
   const [error, setError] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState('korina-villanueva'); // Default template
   const [previewTemplate, setPreviewTemplate] = useState(null);
+  const [pageType, setPageType] = useState('single'); // 'single' or 'multipage'
 
   const API_ENDPOINT = `${API_ROOT}/api/ocr/file`;
 
-  const templates = [
+  const singlePageTemplates = [
     { id: 'korina-villanueva', name: 'Korina Villanueva', color: 'from-amber-600 to-amber-800', desc: 'Elegant two-column with light beige sidebar' },
     { id: 'riaan-chandran', name: 'Riaan Chandran', color: 'from-orange-500 to-orange-700', desc: 'Modern dark theme with orange accents' },
     { id: 'adora-montminy', name: 'Adora Montminy', color: 'from-pink-500 to-pink-700', desc: 'Creative dark charcoal with light pink accent' },
@@ -55,7 +60,128 @@ export default function PdfUpload() {
     { id: 'phylis-flex', name: 'Phylis Flex', color: 'from-gray-300 to-gray-500', desc: 'Clean design with light gray header' }
   ];
 
-  const previewData = {
+  const multiPageTemplates = [
+    { id: 'multipage-template-1', name: 'Multi-Page Professional', color: 'from-blue-700 to-blue-900', desc: '3-page corporate style with dark blue header' },
+    { id: 'multipage-template-2', name: 'Multi-Page Modern Tech', color: 'from-blue-500 to-indigo-600', desc: '3-page modern tech style with gradient design' },
+    { id: 'multipage-template-3', name: 'Multi-Page Creative', color: 'from-purple-700 to-indigo-800', desc: '3-page creative design with purple sidebar' }
+  ];
+
+  // Get current templates based on page type
+  const templates = pageType === 'single' ? singlePageTemplates : multiPageTemplates;
+
+  // Enhanced preview data for multi-page templates
+  const previewData = pageType === 'multipage' ? {
+    name: 'Alex Johnson',
+    email: 'alex.johnson@email.com',
+    phone: '+1 (555) 123-4567',
+    location: 'San Francisco, CA',
+    role: 'Senior Software Engineer',
+    summary: 'Experienced professional with a proven track record in delivering high-quality results. Skilled in modern web technologies and passionate about creating innovative solutions. Over 8 years of experience in full-stack development, cloud architecture, and team leadership. Proven ability to design and implement scalable systems serving millions of users.',
+    education: [
+      {
+        degree: 'Bachelor of Science in Computer Science',
+        institution: 'University of California',
+        year: 2020,
+        gpa: '3.8'
+      },
+      {
+        degree: 'Master of Science in Software Engineering',
+        institution: 'Stanford University',
+        year: 2022,
+        gpa: '3.9'
+      },
+      {
+        degree: 'Certificate in Cloud Architecture',
+        institution: 'AWS Training',
+        year: 2023
+      }
+    ],
+    experience: [
+      {
+        title: 'Senior Software Engineer',
+        company: 'Tech Company Inc.',
+        startDate: 'Jan 2022',
+        endDate: 'Present',
+        current: true,
+        description: 'Leading development of scalable web applications serving 10M+ users. Architecting microservices and implementing CI/CD pipelines. Mentoring junior developers and conducting code reviews. Reduced system latency by 40% through optimization initiatives.'
+      },
+      {
+        title: 'Software Engineer',
+        company: 'StartupCo',
+        startDate: 'Jun 2020',
+        endDate: 'Dec 2021',
+        current: false,
+        description: 'Developed and maintained full-stack web applications using React and Node.js. Collaborated with cross-functional teams to deliver high-quality products. Implemented automated testing reducing bugs by 60%.'
+      },
+      {
+        title: 'Junior Developer',
+        company: 'Web Solutions Ltd.',
+        startDate: 'Jan 2018',
+        endDate: 'May 2020',
+        current: false,
+        description: 'Built responsive web applications using modern JavaScript frameworks. Participated in agile development processes and code reviews. Contributed to open-source projects.'
+      }
+    ],
+    skills: [
+      { name: 'JavaScript', level: 'Expert' },
+      { name: 'React', level: 'Expert' },
+      { name: 'Node.js', level: 'Advanced' },
+      { name: 'Python', level: 'Advanced' },
+      { name: 'AWS', level: 'Advanced' },
+      { name: 'Docker', level: 'Advanced' },
+      { name: 'Kubernetes', level: 'Intermediate' },
+      { name: 'TypeScript', level: 'Expert' },
+      { name: 'MongoDB', level: 'Advanced' },
+      { name: 'PostgreSQL', level: 'Advanced' },
+      { name: 'GraphQL', level: 'Intermediate' },
+      { name: 'Redis', level: 'Intermediate' },
+      { name: 'Git', level: 'Expert' },
+      { name: 'CI/CD', level: 'Advanced' },
+      { name: 'Microservices', level: 'Advanced' },
+      { name: 'REST APIs', level: 'Expert' },
+      { name: 'Agile/Scrum', level: 'Advanced' },
+      { name: 'System Design', level: 'Advanced' },
+      { name: 'Linux', level: 'Intermediate' },
+      { name: 'Terraform', level: 'Intermediate' }
+    ],
+    projects: [
+      {
+        name: 'E-Commerce Platform',
+        description: 'Built a full-stack e-commerce application with modern technologies. Implemented payment processing, inventory management, and user authentication. Handles 1M+ transactions monthly with 99.9% uptime.',
+        technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+        url: 'https://example.com',
+        github: 'https://github.com/example/project'
+      },
+      {
+        name: 'Task Management App',
+        description: 'Developed a collaborative task management application with real-time updates and team collaboration features. Used WebSocket for live updates and implemented advanced filtering.',
+        technologies: ['React', 'Firebase', 'Material-UI'],
+        url: 'https://example.com',
+        github: 'https://github.com/example/tasks'
+      },
+      {
+        name: 'Cloud Infrastructure Automation',
+        description: 'Created automated infrastructure deployment system using Terraform and AWS. Reduced deployment time from 2 hours to 15 minutes.',
+        technologies: ['Terraform', 'AWS', 'Docker', 'Kubernetes'],
+        url: 'https://example.com',
+        github: 'https://github.com/example/infra'
+      }
+    ],
+    certifications: [
+      { name: 'AWS Certified Solutions Architect', issuer: 'Amazon Web Services', date: '2023' },
+      { name: 'Google Cloud Professional Developer', issuer: 'Google Cloud', date: '2022' },
+      { name: 'Certified Kubernetes Administrator', issuer: 'CNCF', date: '2023' }
+    ],
+    awards: [
+      { name: 'Employee of the Year', organization: 'Tech Company Inc.', date: '2023' },
+      { name: 'Innovation Award', organization: 'StartupCo', date: '2021' }
+    ],
+    languages: [
+      { name: 'English', proficiency: 'Native' },
+      { name: 'Spanish', proficiency: 'Fluent' },
+      { name: 'French', proficiency: 'Intermediate' }
+    ]
+  } : {
     name: 'Alex Johnson',
     email: 'alex.johnson@email.com',
     phone: '+1 (555) 123-4567',
@@ -138,6 +264,9 @@ export default function PdfUpload() {
       case 'catrine-ziv': return CatrineZivTemplate;
       case 'olivia-wilson-dark-blue': return OliviaWilsonDarkBlueTemplate;
       case 'phylis-flex': return PhylisFlexTemplate;
+      case 'multipage-template-1': return MultiPageTemplate1;
+      case 'multipage-template-2': return MultiPageTemplate2;
+      case 'multipage-template-3': return MultiPageTemplate3;
       default: return KorinaVillanuevaTemplate;
     }
   };
@@ -169,6 +298,8 @@ export default function PdfUpload() {
     // Allowed file types
     const allowedTypes = [
       'application/pdf',
+      'application/msword', // .doc
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
       'image/jpeg',
       'image/jpg',
       'image/png',
@@ -177,11 +308,16 @@ export default function PdfUpload() {
       'image/tiff'
     ];
 
+    // Get file extension for additional validation
+    const fileName = selectedFile.name.toLowerCase();
+    const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+    const allowedExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'];
+
     // Validate file type
-    if (!allowedTypes.includes(selectedFile.type)) {
-      setError('Invalid file type. Allowed types: PDF, JPG, JPEG, PNG, GIF, BMP, TIFF');
+    if (!allowedTypes.includes(selectedFile.type) && !allowedExtensions.includes(fileExtension)) {
+      setError('Invalid file type. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF, BMP, TIFF');
       setFile(null);
-      toast.error('❌ Invalid file type. Please select a PDF or image file.');
+      toast.error('❌ Invalid file type. Please select a PDF, DOC, DOCX, or image file.');
       return;
     }
     
@@ -253,10 +389,28 @@ export default function PdfUpload() {
 
       // Step 7: Handle response
       if (data.success) {
-        setResume(data.data.resume);
+        let resumeData = data.data.resume;
+        // Ensure template is saved with the selected template
+        // Backend should save it from FormData, but ensure it's set in the response
+        if (!resumeData.template || resumeData.template !== selectedTemplate) {
+          resumeData.template = selectedTemplate;
+          // Update the resume in backend to ensure template is saved correctly
+          try {
+            const updated = await resumeApi.updateResume(resumeData._id, { template: selectedTemplate });
+            if (updated && updated.template) {
+              resumeData.template = updated.template;
+            }
+          } catch (err) {
+            console.warn('Failed to update template in backend:', err);
+            // Still set it locally so it displays correctly
+            resumeData.template = selectedTemplate;
+          }
+        }
+        setResume(resumeData);
         setError(null);
-        toast.success(`✅ Resume created for ${data.data.resume.name}!`);
-        console.log('✅ Resume data:', data.data.resume);
+        toast.success(`✅ Resume created for ${resumeData.name}!`);
+        console.log('✅ Resume data:', resumeData);
+        console.log('✅ Template saved:', resumeData.template);
       } else {
         // Handle different error types from API
         const errorMessage = data.message || data.error || 'Failed to process file';
@@ -307,10 +461,23 @@ Check backend console for errors.`;
     setResume(null);
     setError(null);
     setProgress(0);
+    setPageType('single');
     setSelectedTemplate('korina-villanueva'); // Reset to default
     // Reset file input
     const fileInput = document.getElementById('file-input');
     if (fileInput) fileInput.value = '';
+  };
+
+  // Handle page type change
+  const handlePageTypeChange = (type) => {
+    setPageType(type);
+    // Reset template selection when switching page types
+    if (type === 'single') {
+      setSelectedTemplate('korina-villanueva');
+    } else {
+      setSelectedTemplate('multipage-template-1');
+    }
+    setError(null);
   };
 
   /**
@@ -373,13 +540,57 @@ Check backend console for errors.`;
                       Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TIFF • Maximum size: 10MB • Processing time: 5-30 seconds
                     </p>
                   </div>
+
+                {/* Page Type Selection */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-white mb-3">
+                    Resume Type *
+                  </label>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => handlePageTypeChange('single')}
+                      className={`flex-1 py-4 px-6 rounded-lg border-2 transition-all duration-200 font-bold ${
+                        pageType === 'single'
+                          ? 'border-cyan-400 bg-cyan-500/20 text-white'
+                          : 'border-neutral-700 bg-neutral-900/50 text-gray-400 hover:border-neutral-600 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Single Page
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => handlePageTypeChange('multipage')}
+                      className={`flex-1 py-4 px-6 rounded-lg border-2 transition-all duration-200 font-bold ${
+                        pageType === 'multipage'
+                          ? 'border-cyan-400 bg-cyan-500/20 text-white'
+                          : 'border-neutral-700 bg-neutral-900/50 text-gray-400 hover:border-neutral-600 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Multi-Page
+                      </div>
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {pageType === 'single' 
+                      ? 'Choose this for standard 1-page resumes' 
+                      : 'Choose this for resumes with extensive content (2-3 pages)'}
+                  </p>
+                </div>
                 
                 {/* Template Selection */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-white mb-3">
                     Select Template *
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {templates.map((template) => (
                       <div
                         key={template.id}
@@ -458,13 +669,13 @@ Check backend console for errors.`;
                 {/* File Input */}
                 <div className="mb-6">
                   <label className="block text-sm font-bold text-white mb-3">
-                    Select Resume File
+                    Select Resume File (PDF, DOC, DOCX, or Image)
                   </label>
                   <div className="relative">
                     <input
                       id="file-input"
                       type="file"
-                      accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,application/pdf,image/jpeg,image/jpg,image/png,image/gif,image/bmp,image/tiff"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/jpg,image/png,image/gif,image/bmp,image/tiff"
                       onChange={handleFileChange}
                       disabled={uploading}
                       className="block w-full text-sm text-gray-400
@@ -725,7 +936,9 @@ Check backend console for errors.`;
 
             {/* Modal Content */}
             <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 bg-white">
-              <div className="transform scale-75 origin-top">
+              <div className={`transform origin-top ${
+                pageType === 'multipage' ? 'scale-50' : 'scale-75'
+              }`}>
                 {(() => {
                   const TemplateComponent = getTemplateComponent(previewTemplate);
                   return <TemplateComponent formData={previewData} />;

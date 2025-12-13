@@ -3,16 +3,12 @@ import EditableText from '../EditableText';
 
 const FranciscoAndradeTemplate = ({ formData = {}, editable = false, onChange = () => {} }) => {
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    education = [],
-    experience = [],
-    skills = [],
-    projects = [],
-    location = '',
-    role = ''
+    name = '', email = '', phone = '', summary = '', education = [], experience = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData;
 
   const darkBlue = '#1E3A5F'; // Dark blue header
@@ -513,6 +509,279 @@ const FranciscoAndradeTemplate = ({ formData = {}, editable = false, onChange = 
             </div>
           </div>
         </div>
+
+        {/* ALL ADDITIONAL FIELDS */}
+        {((certifications && certifications.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>CERTIFICATIONS</h3>
+            <div className="space-y-2">
+              {(certifications || []).map((cert, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={cert.name || ''} placeholder="Certification" editable={editable} onChange={(val) => onChange(`certifications.${index}.name`, val)} />
+                  {cert.issuer && <span> - {cert.issuer}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((trainings && trainings.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>TRAININGS</h3>
+            <div className="space-y-2">
+              {(trainings || []).map((training, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={training.name || ''} placeholder="Training" editable={editable} onChange={(val) => onChange(`trainings.${index}.name`, val)} />
+                  {training.institution && <span> - {training.institution}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((awards && awards.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>AWARDS</h3>
+            <div className="space-y-2">
+              {(awards || []).map((award, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={award.name || ''} placeholder="Award" editable={editable} onChange={(val) => onChange(`awards.${index}.name`, val)} />
+                  {award.organization && <span> - {award.organization}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((languages && languages.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>LANGUAGES</h3>
+            <div className="space-y-2">
+              {(languages || []).map((lang, index) => (
+                <div key={index} className="flex justify-between text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={lang.name || ''} placeholder="Language" editable={editable} onChange={(val) => onChange(`languages.${index}.name`, val)} />
+                  <span>{lang.proficiency || 'Fluent'}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((publications && publications.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>PUBLICATIONS</h3>
+            <div className="space-y-2">
+              {(publications || []).map((pub, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={pub.title || ''} placeholder="Publication" editable={editable} onChange={(val) => onChange(`publications.${index}.title`, val)} />
+                  {pub.journal && <span> - {pub.journal}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((patents && patents.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>PATENTS</h3>
+            <div className="space-y-2">
+              {(patents || []).map((patent, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={patent.title || ''} placeholder="Patent" editable={editable} onChange={(val) => onChange(`patents.${index}.title`, val)} />
+                  {patent.patentNumber && <span> - {patent.patentNumber}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((volunteerWork && volunteerWork.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>VOLUNTEER WORK</h3>
+            <div className="space-y-2">
+              {(volunteerWork || []).map((vol, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={vol.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`volunteerWork.${index}.organization`, val)} />
+                  {vol.role && <span> - {vol.role}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((professionalMemberships && professionalMemberships.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>MEMBERSHIPS</h3>
+            <div className="space-y-2">
+              {(professionalMemberships || []).map((mem, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={mem.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`professionalMemberships.${index}.organization`, val)} />
+                  {mem.role && <span> - {mem.role}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((conferences && conferences.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>CONFERENCES</h3>
+            <div className="space-y-2">
+              {(conferences || []).map((conf, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={conf.name || ''} placeholder="Conference" editable={editable} onChange={(val) => onChange(`conferences.${index}.name`, val)} />
+                  {conf.location && <span> - {conf.location}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((speakingEngagements && speakingEngagements.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>SPEAKING</h3>
+            <div className="space-y-2">
+              {(speakingEngagements || []).map((speak, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={speak.title || ''} placeholder="Speaking Title" editable={editable} onChange={(val) => onChange(`speakingEngagements.${index}.title`, val)} />
+                  {speak.event && <span> - {speak.event}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((teachingExperience && teachingExperience.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>TEACHING</h3>
+            <div className="space-y-2">
+              {(teachingExperience || []).map((teach, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={teach.course || ''} placeholder="Course" editable={editable} onChange={(val) => onChange(`teachingExperience.${index}.course`, val)} />
+                  {teach.institution && <span> - {teach.institution}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((mentoring && mentoring.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>MENTORING</h3>
+            <div className="space-y-2">
+              {(mentoring || []).map((ment, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={ment.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`mentoring.${index}.organization`, val)} />
+                  {ment.focus && <span> - {ment.focus}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((leadershipRoles && leadershipRoles.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>LEADERSHIP</h3>
+            <div className="space-y-2">
+              {(leadershipRoles || []).map((lead, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={lead.title || ''} placeholder="Leadership Role" editable={editable} onChange={(val) => onChange(`leadershipRoles.${index}.title`, val)} />
+                  {lead.organization && <span> - {lead.organization}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((internships && internships.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>INTERNSHIPS</h3>
+            <div className="space-y-2">
+              {(internships || []).map((intern, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={intern.title || ''} placeholder="Internship Title" editable={editable} onChange={(val) => onChange(`internships.${index}.title`, val)} />
+                  {intern.company && <span> - {intern.company}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((licenses && licenses.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>LICENSES</h3>
+            <div className="space-y-2">
+              {(licenses || []).map((lic, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={lic.name || ''} placeholder="License" editable={editable} onChange={(val) => onChange(`licenses.${index}.name`, val)} />
+                  {lic.issuingOrganization && <span> - {lic.issuingOrganization}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((references && references.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>REFERENCES</h3>
+            <div className="space-y-2">
+              {(references || []).map((ref, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={ref.name || ''} placeholder="Reference Name" editable={editable} onChange={(val) => onChange(`references.${index}.name`, val)} />
+                  {ref.title && <span> - {ref.title}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((openSourceContributions && openSourceContributions.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>OPEN SOURCE</h3>
+            <div className="space-y-2">
+              {(openSourceContributions || []).map((os, index) => (
+                <div key={index} className="text-xs" style={{ fontSize: '11px', color: textDark }}>
+                  <EditableText value={os.project || ''} placeholder="Project" editable={editable} onChange={(val) => onChange(`openSourceContributions.${index}.project`, val)} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((hobbies && hobbies.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>HOBBIES</h3>
+            <div className="flex flex-wrap gap-2">
+              {(hobbies || []).map((hobby, index) => (
+                <span key={index} className="px-2 py-0.5 text-xs border" style={{ fontSize: '10px', borderColor: textDark, color: textDark }}>
+                  {typeof hobby === 'string' ? hobby : (hobby?.name || hobby?.title || hobby)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((interests && interests.length > 0) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>INTERESTS</h3>
+            <div className="flex flex-wrap gap-2">
+              {(interests || []).map((interest, index) => (
+                <span key={index} className="px-2 py-0.5 text-xs border" style={{ fontSize: '10px', borderColor: textDark, color: textDark }}>
+                  {typeof interest === 'string' ? interest : (interest?.name || interest?.title || interest)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((additionalInfo && additionalInfo.trim()) || editable) && (
+          <div className="mt-6">
+            <h3 className="font-bold uppercase mb-4 border-b-2 border-black pb-2" style={{ fontSize: '12px', letterSpacing: '1px', color: textDark }}>ADDITIONAL INFO</h3>
+            <div className="text-xs leading-relaxed" style={{ fontSize: '11px', color: textDark }}>
+              <EditableText value={additionalInfo || ''} placeholder="Additional information" editable={editable} onChange={(val) => onChange('additionalInfo', val)} multiline />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -46,12 +46,14 @@ const ResumeBuilder = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [previewScale, setPreviewScale] = useState(1);
   
-  // Form data matching backend schema exactly
+  // Form data matching backend schema exactly - all fields optional except name, email, phone, summary
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     summary: '',
+    location: '',
+    role: '',
     education: [{
       degree: '',
       institution: '',
@@ -76,7 +78,151 @@ const ResumeBuilder = () => {
       technologies: [],
       url: '',
       github: ''
-    }]
+    }],
+    certifications: [{
+      name: '',
+      issuer: '',
+      date: '',
+      expiryDate: '',
+      credentialId: '',
+      url: ''
+    }],
+    trainings: [{
+      name: '',
+      institution: '',
+      date: '',
+      duration: '',
+      description: ''
+    }],
+    awards: [{
+      name: '',
+      organization: '',
+      year: '',
+      description: ''
+    }],
+    languages: [{
+      name: '',
+      proficiency: 'Intermediate'
+    }],
+    publications: [{
+      title: '',
+      authors: '',
+      journal: '',
+      year: '',
+      doi: '',
+      url: '',
+      type: 'Journal Article'
+    }],
+    patents: [{
+      title: '',
+      patentNumber: '',
+      issuedDate: '',
+      inventors: '',
+      description: '',
+      url: ''
+    }],
+    volunteerWork: [{
+      organization: '',
+      role: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: '',
+      hoursPerWeek: ''
+    }],
+    professionalMemberships: [{
+      organization: '',
+      role: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: ''
+    }],
+    conferences: [{
+      name: '',
+      location: '',
+      date: '',
+      type: 'Attended',
+      description: ''
+    }],
+    speakingEngagements: [{
+      title: '',
+      event: '',
+      location: '',
+      date: '',
+      description: '',
+      url: ''
+    }],
+    teachingExperience: [{
+      course: '',
+      institution: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: '',
+      level: 'Undergraduate'
+    }],
+    mentoring: [{
+      menteeName: '',
+      organization: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: '',
+      focus: ''
+    }],
+    leadershipRoles: [{
+      title: '',
+      organization: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: ''
+    }],
+    internships: [{
+      title: '',
+      company: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    }],
+    licenses: [{
+      name: '',
+      issuingOrganization: '',
+      licenseNumber: '',
+      issueDate: '',
+      expiryDate: '',
+      state: ''
+    }],
+    references: [{
+      name: '',
+      title: '',
+      company: '',
+      email: '',
+      phone: '',
+      relationship: ''
+    }],
+    socialMedia: {
+      linkedin: '',
+      github: '',
+      twitter: '',
+      portfolio: '',
+      website: '',
+      blog: '',
+      behance: '',
+      dribbble: '',
+      medium: '',
+      stackoverflow: ''
+    },
+    hobbies: [],
+    interests: [],
+    openSourceContributions: [{
+      project: '',
+      url: '',
+      description: '',
+      contributions: ''
+    }],
+    additionalInfo: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -114,7 +260,8 @@ const ResumeBuilder = () => {
     { id: 2, title: 'Education', description: 'Academic background', icon: '🎓' },
     { id: 3, title: 'Experience', description: 'Work history', icon: '💼' },
     { id: 4, title: 'Skills', description: 'Your expertise', icon: '⚡' },
-    { id: 5, title: 'Projects', description: 'Portfolio projects', icon: '🚀' }
+    { id: 5, title: 'Projects', description: 'Portfolio projects', icon: '🚀' },
+    { id: 6, title: 'Additional Info', description: 'Certifications, awards & more', icon: '📋' }
   ];
 
   const skillLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
@@ -128,11 +275,12 @@ const ResumeBuilder = () => {
           newErrors.template = 'Please select a template';
         }
         break;
-      case 2: // Personal Info - all required
+      case 2: // Personal Info - name, email, phone, summary required; location, role optional
         if (!formData.name?.trim()) newErrors.name = 'Full name is required';
         if (!formData.email?.trim()) newErrors.email = 'Email is required';
         if (!formData.phone?.trim()) newErrors.phone = 'Phone is required';
         if (!formData.summary?.trim()) newErrors.summary = 'Professional summary is required';
+        // location and role are optional - no validation needed
         break;
       case 3: // Education - optional, but if started, complete it
         // Only validate if user has started filling education
@@ -203,6 +351,9 @@ const ResumeBuilder = () => {
         }
         // Always allow navigation for projects (it's optional)
         break;
+      case 7: // Additional Info - all optional, no validation needed
+        // All fields in this step are optional - users can skip entirely
+        break;
       default:
         break;
     }
@@ -221,7 +372,7 @@ const ResumeBuilder = () => {
           return; // Don't allow forward navigation if validation fails
         }
       }
-      // For steps 3-6, allow navigation without validation (they're optional)
+      // For steps 3-7, allow navigation without validation (they're optional)
     }
     // Always allow going back or staying on current step
     setCurrentStep(step);
@@ -276,29 +427,26 @@ const ResumeBuilder = () => {
   };
 
   const handleGenerateCV = async () => {
-    // Validate all steps (1-based indexing)
-    let allValid = true;
-    for (let i = 1; i <= 6; i++) {
-      if (!validateStep(i)) {
-        allValid = false;
-        toast.error(`Please complete step ${i}: ${steps[i - 1].title}`);
-        setCurrentStep(i);
-        return;
-      }
+    // Validate required steps only (1 and 2)
+    if (!validateStep(1) || !validateStep(2)) {
+      toast.error('Please complete all required fields');
+      if (!validateStep(1)) setCurrentStep(1);
+      else if (!validateStep(2)) setCurrentStep(2);
+      return;
     }
-
-    if (!allValid) return;
 
     setIsGenerating(true);
 
     try {
-      // Prepare data for backend (filter out empty items)
+      // Prepare data for backend (filter out empty items - all fields optional except name, email, phone, summary)
       const resumeData = {
-        template: selectedTemplate, // Save the selected template
+        template: selectedTemplate,
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         phone: formData.phone.trim(),
         summary: formData.summary.trim(),
+        ...(formData.location?.trim() && { location: formData.location.trim() }),
+        ...(formData.role?.trim() && { role: formData.role.trim() }),
         education: formData.education.filter(edu => edu.degree && edu.institution && edu.year)
           .map(edu => ({
             degree: edu.degree,
@@ -328,7 +476,163 @@ const ResumeBuilder = () => {
                          (typeof proj.technologies === 'string' ? proj.technologies.split(',').map(t => t.trim()) : []),
             ...(proj.url && { url: proj.url }),
             ...(proj.github && { github: proj.github })
-          }))
+          })),
+        certifications: formData.certifications.filter(cert => cert.name)
+          .map(cert => ({
+            name: cert.name,
+            ...(cert.issuer && { issuer: cert.issuer }),
+            ...(cert.date && { date: cert.date }),
+            ...(cert.expiryDate && { expiryDate: cert.expiryDate }),
+            ...(cert.credentialId && { credentialId: cert.credentialId }),
+            ...(cert.url && { url: cert.url })
+          })),
+        trainings: formData.trainings.filter(training => training.name)
+          .map(training => ({
+            name: training.name,
+            ...(training.institution && { institution: training.institution }),
+            ...(training.date && { date: training.date }),
+            ...(training.duration && { duration: training.duration }),
+            ...(training.description && { description: training.description })
+          })),
+        awards: formData.awards.filter(award => award.name)
+          .map(award => ({
+            name: award.name,
+            ...(award.organization && { organization: award.organization }),
+            ...(award.year && { year: award.year }),
+            ...(award.description && { description: award.description })
+          })),
+        languages: formData.languages.filter(lang => lang.name)
+          .map(lang => ({
+            name: lang.name,
+            ...(lang.proficiency && { proficiency: lang.proficiency })
+          })),
+        publications: formData.publications.filter(pub => pub.title)
+          .map(pub => ({
+            title: pub.title,
+            ...(pub.authors && { authors: pub.authors }),
+            ...(pub.journal && { journal: pub.journal }),
+            ...(pub.year && { year: pub.year }),
+            ...(pub.doi && { doi: pub.doi }),
+            ...(pub.url && { url: pub.url }),
+            ...(pub.type && { type: pub.type })
+          })),
+        patents: formData.patents.filter(patent => patent.title)
+          .map(patent => ({
+            title: patent.title,
+            ...(patent.patentNumber && { patentNumber: patent.patentNumber }),
+            ...(patent.issuedDate && { issuedDate: patent.issuedDate }),
+            ...(patent.inventors && { inventors: patent.inventors }),
+            ...(patent.description && { description: patent.description }),
+            ...(patent.url && { url: patent.url })
+          })),
+        volunteerWork: formData.volunteerWork.filter(vol => vol.organization)
+          .map(vol => ({
+            organization: vol.organization,
+            ...(vol.role && { role: vol.role }),
+            ...(vol.startDate && { startDate: vol.startDate }),
+            ...(vol.endDate && { endDate: vol.endDate }),
+            current: vol.current || false,
+            ...(vol.description && { description: vol.description }),
+            ...(vol.hoursPerWeek && { hoursPerWeek: vol.hoursPerWeek })
+          })),
+        professionalMemberships: formData.professionalMemberships.filter(mem => mem.organization)
+          .map(mem => ({
+            organization: mem.organization,
+            ...(mem.role && { role: mem.role }),
+            ...(mem.startDate && { startDate: mem.startDate }),
+            ...(mem.endDate && { endDate: mem.endDate }),
+            current: mem.current || false,
+            ...(mem.description && { description: mem.description })
+          })),
+        conferences: formData.conferences.filter(conf => conf.name)
+          .map(conf => ({
+            name: conf.name,
+            ...(conf.location && { location: conf.location }),
+            ...(conf.date && { date: conf.date }),
+            ...(conf.type && { type: conf.type }),
+            ...(conf.description && { description: conf.description })
+          })),
+        speakingEngagements: formData.speakingEngagements.filter(speak => speak.title)
+          .map(speak => ({
+            title: speak.title,
+            ...(speak.event && { event: speak.event }),
+            ...(speak.location && { location: speak.location }),
+            ...(speak.date && { date: speak.date }),
+            ...(speak.description && { description: speak.description }),
+            ...(speak.url && { url: speak.url })
+          })),
+        teachingExperience: formData.teachingExperience.filter(teach => teach.course)
+          .map(teach => ({
+            course: teach.course,
+            ...(teach.institution && { institution: teach.institution }),
+            ...(teach.startDate && { startDate: teach.startDate }),
+            ...(teach.endDate && { endDate: teach.endDate }),
+            current: teach.current || false,
+            ...(teach.description && { description: teach.description }),
+            ...(teach.level && { level: teach.level })
+          })),
+        mentoring: formData.mentoring.filter(ment => ment.organization)
+          .map(ment => ({
+            organization: ment.organization,
+            ...(ment.menteeName && { menteeName: ment.menteeName }),
+            ...(ment.startDate && { startDate: ment.startDate }),
+            ...(ment.endDate && { endDate: ment.endDate }),
+            current: ment.current || false,
+            ...(ment.description && { description: ment.description }),
+            ...(ment.focus && { focus: ment.focus })
+          })),
+        leadershipRoles: formData.leadershipRoles.filter(lead => lead.title)
+          .map(lead => ({
+            title: lead.title,
+            ...(lead.organization && { organization: lead.organization }),
+            ...(lead.startDate && { startDate: lead.startDate }),
+            ...(lead.endDate && { endDate: lead.endDate }),
+            current: lead.current || false,
+            ...(lead.description && { description: lead.description })
+          })),
+        internships: formData.internships.filter(intern => intern.title && intern.company)
+          .map(intern => ({
+            title: intern.title,
+            company: intern.company,
+            ...(intern.startDate && { startDate: intern.startDate }),
+            ...(intern.endDate && { endDate: intern.endDate }),
+            ...(intern.description && { description: intern.description })
+          })),
+        licenses: formData.licenses.filter(lic => lic.name)
+          .map(lic => ({
+            name: lic.name,
+            ...(lic.issuingOrganization && { issuingOrganization: lic.issuingOrganization }),
+            ...(lic.licenseNumber && { licenseNumber: lic.licenseNumber }),
+            ...(lic.issueDate && { issueDate: lic.issueDate }),
+            ...(lic.expiryDate && { expiryDate: lic.expiryDate }),
+            ...(lic.state && { state: lic.state })
+          })),
+        references: formData.references.filter(ref => ref.name)
+          .map(ref => ({
+            name: ref.name,
+            ...(ref.title && { title: ref.title }),
+            ...(ref.company && { company: ref.company }),
+            ...(ref.email && { email: ref.email }),
+            ...(ref.phone && { phone: ref.phone }),
+            ...(ref.relationship && { relationship: ref.relationship })
+          })),
+        socialMedia: Object.keys(formData.socialMedia).some(key => formData.socialMedia[key]?.trim())
+          ? Object.fromEntries(
+              Object.entries(formData.socialMedia)
+                .filter(([_, value]) => value?.trim())
+                .map(([key, value]) => [key, value.trim()])
+            )
+          : {},
+        hobbies: formData.hobbies.filter(h => h?.trim()),
+        interests: formData.interests.filter(i => i?.trim()),
+        openSourceContributions: formData.openSourceContributions.filter(os => os.project)
+          .map(os => ({
+            project: os.project,
+            ...(os.url && { url: os.url }),
+            ...(os.description && { description: os.description }),
+            ...(os.contributions && { contributions: os.contributions })
+          })),
+        ...(formData.additionalInfo?.trim() && { additionalInfo: formData.additionalInfo.trim() })
       };
 
       // Save to backend
@@ -362,24 +666,46 @@ const ResumeBuilder = () => {
   };
 
   const renderTemplate = () => {
-    // Pass formData directly to templates (matching backend schema)
+    // Pass formData directly to templates (matching backend schema) - all fields optional
     const templateData = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
       summary: formData.summary,
+      location: formData.location,
+      role: formData.role,
       education: formData.education.filter(edu => edu.degree),
       experience: formData.experience.filter(exp => exp.title),
       skills: formData.skills.filter(skill => skill.name),
       projects: formData.projects.filter(proj => proj.name).map(proj => ({
         ...proj,
-        // Ensure technologies is an array for template rendering
         technologies: Array.isArray(proj.technologies) 
           ? proj.technologies 
           : (typeof proj.technologies === 'string' 
             ? proj.technologies.split(',').map(t => t.trim()).filter(t => t)
             : [])
-      }))
+      })),
+      certifications: formData.certifications.filter(cert => cert.name),
+      trainings: formData.trainings.filter(training => training.name),
+      awards: formData.awards.filter(award => award.name),
+      languages: formData.languages.filter(lang => lang.name),
+      publications: formData.publications.filter(pub => pub.title),
+      patents: formData.patents.filter(patent => patent.title),
+      volunteerWork: formData.volunteerWork.filter(vol => vol.organization),
+      professionalMemberships: formData.professionalMemberships.filter(mem => mem.organization),
+      conferences: formData.conferences.filter(conf => conf.name),
+      speakingEngagements: formData.speakingEngagements.filter(speak => speak.title),
+      teachingExperience: formData.teachingExperience.filter(teach => teach.course),
+      mentoring: formData.mentoring.filter(ment => ment.organization),
+      leadershipRoles: formData.leadershipRoles.filter(lead => lead.title),
+      internships: formData.internships.filter(intern => intern.title && intern.company),
+      licenses: formData.licenses.filter(lic => lic.name),
+      references: formData.references.filter(ref => ref.name),
+      socialMedia: formData.socialMedia,
+      hobbies: formData.hobbies.filter(h => h?.trim()),
+      interests: formData.interests.filter(i => i?.trim()),
+      openSourceContributions: formData.openSourceContributions.filter(os => os.project),
+      additionalInfo: formData.additionalInfo
     };
 
     switch (selectedTemplate) {
@@ -541,6 +867,30 @@ const ResumeBuilder = () => {
               />
               {errors.summary && <p className="text-sm text-red-400">{errors.summary}</p>}
               <p className="text-sm text-white/60">Write a brief summary of your professional background and goals (2-3 sentences)</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="location" className="text-white">Location (Optional)</Label>
+                <Input
+                  id="location"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  className="bg-black/50 border-white/20 text-white placeholder:text-white/40 focus:border-white/40"
+                  placeholder="City, Country"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="role" className="text-white">Current Role (Optional)</Label>
+                <Input
+                  id="role"
+                  value={formData.role}
+                  onChange={(e) => handleInputChange('role', e.target.value)}
+                  className="bg-black/50 border-white/20 text-white placeholder:text-white/40 focus:border-white/40"
+                  placeholder="Software Engineer"
+                />
+              </div>
             </div>
           </div>
         );
@@ -910,6 +1260,567 @@ const ResumeBuilder = () => {
           </div>
         );
 
+      case 7: // Additional Info - ALL optional fields from schema
+        return (
+          <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+            <AnimatedText tag="h3" className="text-2xl font-black text-white mb-4">
+              Additional Information (All Optional)
+            </AnimatedText>
+            <p className="text-sm text-white/60 mb-6">Add any additional information to enhance your resume. All fields are optional.</p>
+
+            {/* Certifications */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Certifications</Label>
+                <AnimatedButton type="button" onClick={() => addItem('certifications', { name: '', issuer: '', date: '', expiryDate: '', credentialId: '', url: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.certifications.map((cert, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Certification {index + 1}</h4>
+                    {formData.certifications.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('certifications', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Input value={cert.name} onChange={(e) => handleArrayChange('certifications', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Name *" />
+                    <Input value={cert.issuer} onChange={(e) => handleArrayChange('certifications', index, 'issuer', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Issuer" />
+                    <Input value={cert.date} onChange={(e) => handleArrayChange('certifications', index, 'date', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Date" />
+                    <Input value={cert.expiryDate} onChange={(e) => handleArrayChange('certifications', index, 'expiryDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Expiry Date" />
+                    <Input value={cert.credentialId} onChange={(e) => handleArrayChange('certifications', index, 'credentialId', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Credential ID" />
+                    <Input value={cert.url} onChange={(e) => handleArrayChange('certifications', index, 'url', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="URL" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Trainings */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Trainings</Label>
+                <AnimatedButton type="button" onClick={() => addItem('trainings', { name: '', institution: '', date: '', duration: '', description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.trainings.map((training, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Training {index + 1}</h4>
+                    {formData.trainings.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('trainings', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={training.name} onChange={(e) => handleArrayChange('trainings', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Training Name *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={training.institution} onChange={(e) => handleArrayChange('trainings', index, 'institution', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Institution" />
+                      <Input value={training.date} onChange={(e) => handleArrayChange('trainings', index, 'date', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Date" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={training.duration} onChange={(e) => handleArrayChange('trainings', index, 'duration', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Duration" />
+                    </div>
+                    <Textarea value={training.description} onChange={(e) => handleArrayChange('trainings', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Awards */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Awards</Label>
+                <AnimatedButton type="button" onClick={() => addItem('awards', { name: '', organization: '', year: '', description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.awards.map((award, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Award {index + 1}</h4>
+                    {formData.awards.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('awards', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={award.name} onChange={(e) => handleArrayChange('awards', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Award Name *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={award.organization} onChange={(e) => handleArrayChange('awards', index, 'organization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Organization" />
+                      <Input value={award.year} onChange={(e) => handleArrayChange('awards', index, 'year', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Year" />
+                    </div>
+                    <Textarea value={award.description} onChange={(e) => handleArrayChange('awards', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Languages */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Languages</Label>
+                <AnimatedButton type="button" onClick={() => addItem('languages', { name: '', proficiency: 'Intermediate' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.languages.map((lang, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center">
+                    <div className="flex-1 grid grid-cols-2 gap-3">
+                      <Input value={lang.name} onChange={(e) => handleArrayChange('languages', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Language *" />
+                      <select value={lang.proficiency} onChange={(e) => handleArrayChange('languages', index, 'proficiency', e.target.value)} className="px-3 py-2 bg-black/50 border border-white/20 rounded-md text-white">
+                        <option value="Basic">Basic</option>
+                        <option value="Conversational">Conversational</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Fluent">Fluent</option>
+                        <option value="Native">Native</option>
+                        <option value="Professional">Professional</option>
+                      </select>
+                    </div>
+                    {formData.languages.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('languages', index)} className="ml-2 text-red-400">✕</AnimatedButton>}
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Publications */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Publications</Label>
+                <AnimatedButton type="button" onClick={() => addItem('publications', { title: '', authors: '', journal: '', year: '', doi: '', url: '', type: 'Journal Article' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.publications.map((pub, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Publication {index + 1}</h4>
+                    {formData.publications.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('publications', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={pub.title} onChange={(e) => handleArrayChange('publications', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={pub.authors} onChange={(e) => handleArrayChange('publications', index, 'authors', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Authors" />
+                      <Input value={pub.journal} onChange={(e) => handleArrayChange('publications', index, 'journal', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Journal" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={pub.year} onChange={(e) => handleArrayChange('publications', index, 'year', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Year" />
+                      <select value={pub.type} onChange={(e) => handleArrayChange('publications', index, 'type', e.target.value)} className="px-3 py-2 bg-black/50 border border-white/20 rounded-md text-white">
+                        <option value="Journal Article">Journal Article</option>
+                        <option value="Conference Paper">Conference Paper</option>
+                        <option value="Book Chapter">Book Chapter</option>
+                        <option value="Book">Book</option>
+                        <option value="Blog Post">Blog Post</option>
+                        <option value="Article">Article</option>
+                        <option value="Research Paper">Research Paper</option>
+                        <option value="Thesis">Thesis</option>
+                        <option value="Dissertation">Dissertation</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={pub.doi} onChange={(e) => handleArrayChange('publications', index, 'doi', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="DOI" />
+                      <Input value={pub.url} onChange={(e) => handleArrayChange('publications', index, 'url', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="URL" />
+                    </div>
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Patents */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Patents</Label>
+                <AnimatedButton type="button" onClick={() => addItem('patents', { title: '', patentNumber: '', issuedDate: '', inventors: '', description: '', url: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.patents.map((patent, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Patent {index + 1}</h4>
+                    {formData.patents.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('patents', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={patent.title} onChange={(e) => handleArrayChange('patents', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={patent.patentNumber} onChange={(e) => handleArrayChange('patents', index, 'patentNumber', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Patent Number" />
+                      <Input value={patent.issuedDate} onChange={(e) => handleArrayChange('patents', index, 'issuedDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Issued Date" />
+                    </div>
+                    <Input value={patent.inventors} onChange={(e) => handleArrayChange('patents', index, 'inventors', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Inventors" />
+                    <Textarea value={patent.description} onChange={(e) => handleArrayChange('patents', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                    <Input value={patent.url} onChange={(e) => handleArrayChange('patents', index, 'url', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="URL" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Volunteer Work */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Volunteer Work</Label>
+                <AnimatedButton type="button" onClick={() => addItem('volunteerWork', { organization: '', role: '', startDate: '', endDate: '', current: false, description: '', hoursPerWeek: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.volunteerWork.map((vol, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Volunteer {index + 1}</h4>
+                    {formData.volunteerWork.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('volunteerWork', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={vol.organization} onChange={(e) => handleArrayChange('volunteerWork', index, 'organization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Organization *" />
+                    <Input value={vol.role} onChange={(e) => handleArrayChange('volunteerWork', index, 'role', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Role" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={vol.startDate} onChange={(e) => handleArrayChange('volunteerWork', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={vol.endDate} onChange={(e) => handleArrayChange('volunteerWork', index, 'endDate', e.target.value)} disabled={vol.current} className="bg-black/50 border-white/20 text-white disabled:opacity-50" placeholder="End Date" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox checked={vol.current} onChange={(e) => handleArrayChange('volunteerWork', index, 'current', e.target.checked)} className="border-white/20" />
+                      <Label className="text-white cursor-pointer">Currently volunteering</Label>
+                    </div>
+                    <Input value={vol.hoursPerWeek} onChange={(e) => handleArrayChange('volunteerWork', index, 'hoursPerWeek', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Hours per Week" />
+                    <Textarea value={vol.description} onChange={(e) => handleArrayChange('volunteerWork', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Professional Memberships */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Professional Memberships</Label>
+                <AnimatedButton type="button" onClick={() => addItem('professionalMemberships', { organization: '', role: '', startDate: '', endDate: '', current: false, description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.professionalMemberships.map((mem, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Membership {index + 1}</h4>
+                    {formData.professionalMemberships.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('professionalMemberships', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={mem.organization} onChange={(e) => handleArrayChange('professionalMemberships', index, 'organization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Organization *" />
+                    <Input value={mem.role} onChange={(e) => handleArrayChange('professionalMemberships', index, 'role', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Role" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={mem.startDate} onChange={(e) => handleArrayChange('professionalMemberships', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={mem.endDate} onChange={(e) => handleArrayChange('professionalMemberships', index, 'endDate', e.target.value)} disabled={mem.current} className="bg-black/50 border-white/20 text-white disabled:opacity-50" placeholder="End Date" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox checked={mem.current} onChange={(e) => handleArrayChange('professionalMemberships', index, 'current', e.target.checked)} className="border-white/20" />
+                      <Label className="text-white cursor-pointer">Current membership</Label>
+                    </div>
+                    <Textarea value={mem.description} onChange={(e) => handleArrayChange('professionalMemberships', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Conferences */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Conferences</Label>
+                <AnimatedButton type="button" onClick={() => addItem('conferences', { name: '', location: '', date: '', type: 'Attended', description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.conferences.map((conf, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Conference {index + 1}</h4>
+                    {formData.conferences.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('conferences', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={conf.name} onChange={(e) => handleArrayChange('conferences', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Conference Name *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={conf.location} onChange={(e) => handleArrayChange('conferences', index, 'location', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Location" />
+                      <Input value={conf.date} onChange={(e) => handleArrayChange('conferences', index, 'date', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Date" />
+                    </div>
+                    <select value={conf.type} onChange={(e) => handleArrayChange('conferences', index, 'type', e.target.value)} className="w-full px-3 py-2 bg-black/50 border border-white/20 rounded-md text-white">
+                      <option value="Attended">Attended</option>
+                      <option value="Presented">Presented</option>
+                      <option value="Keynote">Keynote</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Panel">Panel</option>
+                      <option value="Poster">Poster</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <Textarea value={conf.description} onChange={(e) => handleArrayChange('conferences', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Speaking Engagements */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Speaking Engagements</Label>
+                <AnimatedButton type="button" onClick={() => addItem('speakingEngagements', { title: '', event: '', location: '', date: '', description: '', url: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.speakingEngagements.map((speak, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Engagement {index + 1}</h4>
+                    {formData.speakingEngagements.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('speakingEngagements', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={speak.title} onChange={(e) => handleArrayChange('speakingEngagements', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title *" />
+                    <Input value={speak.event} onChange={(e) => handleArrayChange('speakingEngagements', index, 'event', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Event" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={speak.location} onChange={(e) => handleArrayChange('speakingEngagements', index, 'location', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Location" />
+                      <Input value={speak.date} onChange={(e) => handleArrayChange('speakingEngagements', index, 'date', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Date" />
+                    </div>
+                    <Textarea value={speak.description} onChange={(e) => handleArrayChange('speakingEngagements', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                    <Input value={speak.url} onChange={(e) => handleArrayChange('speakingEngagements', index, 'url', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="URL" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Teaching Experience */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Teaching Experience</Label>
+                <AnimatedButton type="button" onClick={() => addItem('teachingExperience', { course: '', institution: '', startDate: '', endDate: '', current: false, description: '', level: 'Undergraduate' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.teachingExperience.map((teach, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Teaching {index + 1}</h4>
+                    {formData.teachingExperience.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('teachingExperience', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={teach.course} onChange={(e) => handleArrayChange('teachingExperience', index, 'course', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Course *" />
+                    <Input value={teach.institution} onChange={(e) => handleArrayChange('teachingExperience', index, 'institution', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Institution" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={teach.startDate} onChange={(e) => handleArrayChange('teachingExperience', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={teach.endDate} onChange={(e) => handleArrayChange('teachingExperience', index, 'endDate', e.target.value)} disabled={teach.current} className="bg-black/50 border-white/20 text-white disabled:opacity-50" placeholder="End Date" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox checked={teach.current} onChange={(e) => handleArrayChange('teachingExperience', index, 'current', e.target.checked)} className="border-white/20" />
+                      <Label className="text-white cursor-pointer">Currently teaching</Label>
+                    </div>
+                    <select value={teach.level} onChange={(e) => handleArrayChange('teachingExperience', index, 'level', e.target.value)} className="w-full px-3 py-2 bg-black/50 border border-white/20 rounded-md text-white">
+                      <option value="Undergraduate">Undergraduate</option>
+                      <option value="Graduate">Graduate</option>
+                      <option value="Professional">Professional</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Seminar">Seminar</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <Textarea value={teach.description} onChange={(e) => handleArrayChange('teachingExperience', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Mentoring */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Mentoring</Label>
+                <AnimatedButton type="button" onClick={() => addItem('mentoring', { menteeName: '', organization: '', startDate: '', endDate: '', current: false, description: '', focus: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.mentoring.map((ment, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Mentoring {index + 1}</h4>
+                    {formData.mentoring.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('mentoring', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={ment.organization} onChange={(e) => handleArrayChange('mentoring', index, 'organization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Organization *" />
+                    <Input value={ment.menteeName} onChange={(e) => handleArrayChange('mentoring', index, 'menteeName', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Mentee Name" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={ment.startDate} onChange={(e) => handleArrayChange('mentoring', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={ment.endDate} onChange={(e) => handleArrayChange('mentoring', index, 'endDate', e.target.value)} disabled={ment.current} className="bg-black/50 border-white/20 text-white disabled:opacity-50" placeholder="End Date" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox checked={ment.current} onChange={(e) => handleArrayChange('mentoring', index, 'current', e.target.checked)} className="border-white/20" />
+                      <Label className="text-white cursor-pointer">Currently mentoring</Label>
+                    </div>
+                    <Input value={ment.focus} onChange={(e) => handleArrayChange('mentoring', index, 'focus', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Focus Area" />
+                    <Textarea value={ment.description} onChange={(e) => handleArrayChange('mentoring', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Leadership Roles */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Leadership Roles</Label>
+                <AnimatedButton type="button" onClick={() => addItem('leadershipRoles', { title: '', organization: '', startDate: '', endDate: '', current: false, description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.leadershipRoles.map((lead, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Leadership {index + 1}</h4>
+                    {formData.leadershipRoles.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('leadershipRoles', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={lead.title} onChange={(e) => handleArrayChange('leadershipRoles', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title *" />
+                    <Input value={lead.organization} onChange={(e) => handleArrayChange('leadershipRoles', index, 'organization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Organization" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={lead.startDate} onChange={(e) => handleArrayChange('leadershipRoles', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={lead.endDate} onChange={(e) => handleArrayChange('leadershipRoles', index, 'endDate', e.target.value)} disabled={lead.current} className="bg-black/50 border-white/20 text-white disabled:opacity-50" placeholder="End Date" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox checked={lead.current} onChange={(e) => handleArrayChange('leadershipRoles', index, 'current', e.target.checked)} className="border-white/20" />
+                      <Label className="text-white cursor-pointer">Current role</Label>
+                    </div>
+                    <Textarea value={lead.description} onChange={(e) => handleArrayChange('leadershipRoles', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Internships */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Internships</Label>
+                <AnimatedButton type="button" onClick={() => addItem('internships', { title: '', company: '', startDate: '', endDate: '', description: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.internships.map((intern, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Internship {index + 1}</h4>
+                    {formData.internships.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('internships', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={intern.title} onChange={(e) => handleArrayChange('internships', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title *" />
+                    <Input value={intern.company} onChange={(e) => handleArrayChange('internships', index, 'company', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Company *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={intern.startDate} onChange={(e) => handleArrayChange('internships', index, 'startDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Start Date" />
+                      <Input value={intern.endDate} onChange={(e) => handleArrayChange('internships', index, 'endDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="End Date" />
+                    </div>
+                    <Textarea value={intern.description} onChange={(e) => handleArrayChange('internships', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Licenses */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Licenses</Label>
+                <AnimatedButton type="button" onClick={() => addItem('licenses', { name: '', issuingOrganization: '', licenseNumber: '', issueDate: '', expiryDate: '', state: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.licenses.map((lic, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">License {index + 1}</h4>
+                    {formData.licenses.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('licenses', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={lic.name} onChange={(e) => handleArrayChange('licenses', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="License Name *" />
+                    <Input value={lic.issuingOrganization} onChange={(e) => handleArrayChange('licenses', index, 'issuingOrganization', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Issuing Organization" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={lic.licenseNumber} onChange={(e) => handleArrayChange('licenses', index, 'licenseNumber', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="License Number" />
+                      <Input value={lic.state} onChange={(e) => handleArrayChange('licenses', index, 'state', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="State" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={lic.issueDate} onChange={(e) => handleArrayChange('licenses', index, 'issueDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Issue Date" />
+                      <Input value={lic.expiryDate} onChange={(e) => handleArrayChange('licenses', index, 'expiryDate', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Expiry Date" />
+                    </div>
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* References */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">References</Label>
+                <AnimatedButton type="button" onClick={() => addItem('references', { name: '', title: '', company: '', email: '', phone: '', relationship: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.references.map((ref, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Reference {index + 1}</h4>
+                    {formData.references.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('references', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={ref.name} onChange={(e) => handleArrayChange('references', index, 'name', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Name *" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={ref.title} onChange={(e) => handleArrayChange('references', index, 'title', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Title" />
+                      <Input value={ref.company} onChange={(e) => handleArrayChange('references', index, 'company', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Company" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={ref.email} onChange={(e) => handleArrayChange('references', index, 'email', e.target.value)} type="email" className="bg-black/50 border-white/20 text-white" placeholder="Email" />
+                      <Input value={ref.phone} onChange={(e) => handleArrayChange('references', index, 'phone', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Phone" />
+                    </div>
+                    <Input value={ref.relationship} onChange={(e) => handleArrayChange('references', index, 'relationship', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Relationship" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Social Media */}
+            <div className="space-y-4">
+              <Label className="text-white text-lg font-semibold">Social Media & Links</Label>
+              <AnimatedCard className="border-2 border-white/20 bg-white/5 p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <Input value={formData.socialMedia?.linkedin || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, linkedin: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="LinkedIn URL" />
+                  <Input value={formData.socialMedia?.github || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, github: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="GitHub URL" />
+                  <Input value={formData.socialMedia?.twitter || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, twitter: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Twitter URL" />
+                  <Input value={formData.socialMedia?.portfolio || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, portfolio: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Portfolio URL" />
+                  <Input value={formData.socialMedia?.website || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, website: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Website URL" />
+                  <Input value={formData.socialMedia?.blog || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, blog: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Blog URL" />
+                  <Input value={formData.socialMedia?.behance || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, behance: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Behance URL" />
+                  <Input value={formData.socialMedia?.dribbble || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, dribbble: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Dribbble URL" />
+                  <Input value={formData.socialMedia?.medium || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, medium: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Medium URL" />
+                  <Input value={formData.socialMedia?.stackoverflow || ''} onChange={(e) => setFormData(prev => ({ ...prev, socialMedia: { ...prev.socialMedia, stackoverflow: e.target.value } }))} className="bg-black/50 border-white/20 text-white" placeholder="Stack Overflow URL" />
+                </div>
+              </AnimatedCard>
+            </div>
+
+            {/* Hobbies */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Hobbies</Label>
+                <AnimatedButton type="button" onClick={() => addItem('hobbies', '')} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.hobbies.map((hobby, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center">
+                    <Input value={typeof hobby === 'string' ? hobby : ''} onChange={(e) => {
+                      const newHobbies = [...formData.hobbies];
+                      newHobbies[index] = e.target.value;
+                      handleInputChange('hobbies', newHobbies);
+                    }} className="bg-black/50 border-white/20 text-white" placeholder="Hobby" />
+                    {formData.hobbies.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('hobbies', index)} className="ml-2 text-red-400">✕</AnimatedButton>}
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Interests */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Interests</Label>
+                <AnimatedButton type="button" onClick={() => addItem('interests', '')} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.interests.map((interest, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center">
+                    <Input value={typeof interest === 'string' ? interest : (interest?.name || interest?.title || '')} onChange={(e) => {
+                      const newInterests = [...formData.interests];
+                      newInterests[index] = e.target.value;
+                      handleInputChange('interests', newInterests);
+                    }} className="bg-black/50 border-white/20 text-white" placeholder="Interest" />
+                    {formData.interests.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('interests', index)} className="ml-2 text-red-400">✕</AnimatedButton>}
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Open Source Contributions */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-white text-lg font-semibold">Open Source Contributions</Label>
+                <AnimatedButton type="button" onClick={() => addItem('openSourceContributions', { project: '', url: '', description: '', contributions: '' })} variant="secondary" size="sm">+ Add</AnimatedButton>
+              </div>
+              {formData.openSourceContributions.map((os, index) => (
+                <AnimatedCard key={index} className="border-2 border-white/20 bg-white/5 p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-md font-bold text-white">Contribution {index + 1}</h4>
+                    {formData.openSourceContributions.length > 1 && <AnimatedButton type="button" variant="ghost" size="sm" onClick={() => removeItem('openSourceContributions', index)} className="text-red-400">✕</AnimatedButton>}
+                  </div>
+                  <div className="space-y-3">
+                    <Input value={os.project} onChange={(e) => handleArrayChange('openSourceContributions', index, 'project', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Project Name *" />
+                    <Input value={os.url} onChange={(e) => handleArrayChange('openSourceContributions', index, 'url', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="URL" />
+                    <Textarea value={os.description} onChange={(e) => handleArrayChange('openSourceContributions', index, 'description', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Description" />
+                    <Textarea value={os.contributions} onChange={(e) => handleArrayChange('openSourceContributions', index, 'contributions', e.target.value)} className="bg-black/50 border-white/20 text-white" placeholder="Contributions" />
+                  </div>
+                </AnimatedCard>
+              ))}
+            </div>
+
+            {/* Additional Info */}
+            <div className="space-y-2">
+              <Label className="text-white">Additional Information</Label>
+              <Textarea value={formData.additionalInfo} onChange={(e) => handleInputChange('additionalInfo', e.target.value)} className="min-h-32 bg-black/50 border-white/20 text-white placeholder:text-white/40" placeholder="Any other information you'd like to include..." />
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -993,7 +1904,7 @@ const ResumeBuilder = () => {
                 onClick: (e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  if (currentStep < 6) {
+                  if (currentStep < 7) {
                     handleStepChange(currentStep + 1);
                   } else {
                     if (!isGenerating) {
@@ -1003,22 +1914,27 @@ const ResumeBuilder = () => {
                 },
                 disabled: isGenerating,
                 className: isGenerating 
-                  ? 'opacity-50 cursor-not-allowed bg-white/20' 
-                  : currentStep === 6 
-                    ? 'bg-white text-black hover:bg-white/90' 
+                  ? '!opacity-50 !cursor-not-allowed !bg-white/20 !text-white' 
+                  : currentStep === 7 
+                    ? '!bg-white !text-black hover:!bg-gray-100 !min-w-[200px] !font-bold' 
                     : 'bg-white/10 hover:bg-white/20 text-white border border-white/20',
                 children: isGenerating 
                   ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <span className="flex items-center justify-center gap-2 whitespace-nowrap text-white">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Generating...
-                    </>
+                      <span className="text-white">Generating...</span>
+                    </span>
                   ) 
-                  : currentStep === 6 
-                    ? '🚀 Generate CV' 
+                  : currentStep === 7 
+                    ? (
+                      <span className="flex items-center justify-center gap-2 whitespace-nowrap">
+                        <span className="text-xl">🚀</span>
+                        <span className="font-bold text-black">Generate Resume</span>
+                      </span>
+                    )
                     : undefined
               }}
             renderStepIndicator={({ step, currentStep, onStepClick }) => {
@@ -1082,6 +1998,7 @@ const ResumeBuilder = () => {
             <Step>{renderStepContent(4)}</Step>
             <Step>{renderStepContent(5)}</Step>
             <Step>{renderStepContent(6)}</Step>
+            <Step>{renderStepContent(7)}</Step>
           </Stepper>
               </SpotlightCard>
             </div>

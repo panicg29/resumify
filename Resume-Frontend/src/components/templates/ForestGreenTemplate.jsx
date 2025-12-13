@@ -5,29 +5,18 @@ import { Phone, Mail, Link as LinkIcon, MapPin, Calendar, Building2 } from 'luci
 const ForestGreenTemplate = ({ formData, editable = false, onChange = () => {} }) => {
   // Destructure matching backend schema
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    education = [],
-    experience = [],
-    skills = [],
-    projects = []
+    name = '', email = '', phone = '', summary = '', education = [], experience = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData || {};
 
-  // Get location from formData if available
-  const location = formData.location || '';
-  const linkedin = formData.linkedin || formData.portfolio || '';
-  const role = formData.role || formData.title || 'The role you are applying for?';
-
-  // Key achievements (if available in formData)
-  const achievements = formData.achievements || formData.keyAchievements || [];
-  
-  // Courses (if available in formData)
-  const courses = formData.courses || [];
-  
-  // Interests (if available in formData)
-  const interests = formData.interests || [];
+  // Get additional fields
+  const linkedin = socialMedia?.linkedin || formData.linkedin || formData.portfolio || '';
+  const achievements = awards || formData.achievements || formData.keyAchievements || [];
+  const courses = trainings || formData.courses || [];
 
   // Dark green color for headings (matching the image)
   const darkGreen = '#1a3d0f';
@@ -556,10 +545,10 @@ const ForestGreenTemplate = ({ formData, editable = false, onChange = () => {} }
                     <path d="M6 0 L7.5 4.5 L12 6 L7.5 7.5 L6 12 L4.5 7.5 L0 6 L4.5 4.5 Z" />
                   </svg>
                   <EditableText
-                    value={interest.name || interest.title || 'Career Interest / Passion'}
+                    value={typeof interest === 'string' ? interest : (interest?.name || interest?.title || 'Career Interest / Passion')}
                     placeholder="Career Interest / Passion"
                     editable={editable}
-                    onChange={(val) => onChange(`interests.${index}.name`, val)}
+                    onChange={(val) => onChange(`interests.${index}`, val)}
                     className="font-bold text-black"
                     style={{ fontSize: '13px' }}
                   />

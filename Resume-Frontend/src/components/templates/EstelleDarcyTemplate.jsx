@@ -3,16 +3,12 @@ import EditableText from '../EditableText';
 
 const EstelleDarcyTemplate = ({ formData = {}, editable = false, onChange = () => {} }) => {
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    education = [],
-    experience = [],
-    skills = [],
-    projects = [],
-    location = '',
-    role = ''
+    name = '', email = '', phone = '', summary = '', education = [], experience = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData;
 
   const lightGrey = '#E0E0E0'; // Light grey sidebar

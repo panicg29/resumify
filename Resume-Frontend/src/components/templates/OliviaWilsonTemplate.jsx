@@ -3,16 +3,12 @@ import EditableText from '../EditableText';
 
 const OliviaWilsonTemplate = ({ formData = {}, editable = false, onChange = () => {} }) => {
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    education = [],
-    experience = [],
-    skills = [],
-    projects = [],
-    location = '',
-    role = ''
+    name = '', email = '', phone = '', summary = '', education = [], experience = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData;
 
   // Color scheme: Light peach/beige sidebar, off-white main, dark brown/black text
@@ -45,10 +41,12 @@ const OliviaWilsonTemplate = ({ formData = {}, editable = false, onChange = () =
     return String(edu.year);
   };
 
-  // Get languages from skills or use default
-  const languages = skills.filter(skill => 
-    ['English', 'French', 'Spanish', 'German', 'Chinese', 'Japanese', 'Italian', 'Portuguese'].includes(skill.name)
-  );
+  // Get languages from formData languages array, or filter from skills as fallback
+  const languageList = languages && languages.length > 0 
+    ? languages 
+    : skills.filter(skill => 
+        ['English', 'French', 'Spanish', 'German', 'Chinese', 'Japanese', 'Italian', 'Portuguese'].includes(skill.name)
+      );
 
   return (
     <div 
@@ -207,23 +205,30 @@ const OliviaWilsonTemplate = ({ formData = {}, editable = false, onChange = () =
             Language
           </h3>
           <ul className="space-y-1 text-sm list-disc list-inside" style={{ color: textDark }}>
-            {languages && languages.length > 0 ? (
-              languages.slice(0, 3).map((lang, index) => (
-                <li key={index}>
-                  <EditableText
-                    value={lang.name || ''}
-                    placeholder={`Language ${index + 1}`}
-                    editable={editable}
-                    onChange={(val) => {
-                      const skillIndex = skills.findIndex(s => s.name === lang.name);
-                      if (skillIndex >= 0) {
-                        onChange(`skills.${skillIndex}.name`, val);
-                      }
-                    }}
-                    style={{ color: textDark }}
-                  />
-                </li>
-              ))
+            {languageList && languageList.length > 0 ? (
+              languageList.slice(0, 3).map((lang, index) => {
+                const langObj = typeof lang === 'string' ? { name: lang } : lang;
+                return (
+                  <li key={index}>
+                    <EditableText
+                      value={langObj.name || ''}
+                      placeholder={`Language ${index + 1}`}
+                      editable={editable}
+                      onChange={(val) => {
+                        if (languages && languages.length > index) {
+                          onChange(`languages.${index}.name`, val);
+                        } else {
+                          const skillIndex = skills.findIndex(s => s.name === langObj.name);
+                          if (skillIndex >= 0) {
+                            onChange(`skills.${skillIndex}.name`, val);
+                          }
+                        }
+                      }}
+                      style={{ color: textDark }}
+                    />
+                  </li>
+                );
+              })
             ) : (
               <>
                 <li>Spanish</li>

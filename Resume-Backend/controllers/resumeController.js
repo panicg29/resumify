@@ -16,6 +16,29 @@ const createResume = async (req, res) => {
       experience,
       skills,
       projects,
+      certifications,
+      trainings,
+      awards,
+      languages,
+      publications,
+      patents,
+      volunteerWork,
+      professionalMemberships,
+      conferences,
+      speakingEngagements,
+      teachingExperience,
+      mentoring,
+      leadershipRoles,
+      internships,
+      licenses,
+      references,
+      socialMedia,
+      hobbies,
+      interests,
+      openSourceContributions,
+      additionalInfo,
+      location,
+      role,
       template
     } = req.body;
 
@@ -32,6 +55,23 @@ const createResume = async (req, res) => {
     const filteredExperience = (experience || []).filter(exp => exp.title && exp.company && exp.startDate && exp.description);
     const filteredSkills = (skills || []).filter(skill => skill.name);
     const filteredProjects = (projects || []).filter(project => project.name && project.description);
+    const filteredCertifications = (certifications || []).filter(cert => cert.name);
+    const filteredTrainings = (trainings || []).filter(training => training.name);
+    const filteredAwards = (awards || []).filter(award => award.name);
+    const filteredLanguages = (languages || []).filter(lang => lang.name);
+    const filteredPublications = (publications || []).filter(pub => pub.title);
+    const filteredPatents = (patents || []).filter(patent => patent.title);
+    const filteredVolunteerWork = (volunteerWork || []).filter(vol => vol.organization);
+    const filteredMemberships = (professionalMemberships || []).filter(mem => mem.organization);
+    const filteredConferences = (conferences || []).filter(conf => conf.name);
+    const filteredSpeaking = (speakingEngagements || []).filter(speak => speak.title);
+    const filteredTeaching = (teachingExperience || []).filter(teach => teach.course);
+    const filteredMentoring = (mentoring || []).filter(ment => ment.organization);
+    const filteredLeadership = (leadershipRoles || []).filter(lead => lead.title);
+    const filteredInternships = (internships || []).filter(intern => intern.title && intern.company);
+    const filteredLicenses = (licenses || []).filter(lic => lic.name);
+    const filteredReferences = (references || []).filter(ref => ref.name);
+    const filteredOpenSource = (openSourceContributions || []).filter(os => os.project);
 
     const resume = new Resume({
       userId,
@@ -43,6 +83,29 @@ const createResume = async (req, res) => {
       experience: filteredExperience,
       skills: filteredSkills,
       projects: filteredProjects,
+      certifications: filteredCertifications,
+      trainings: filteredTrainings,
+      awards: filteredAwards,
+      languages: filteredLanguages,
+      publications: filteredPublications,
+      patents: filteredPatents,
+      volunteerWork: filteredVolunteerWork,
+      professionalMemberships: filteredMemberships,
+      conferences: filteredConferences,
+      speakingEngagements: filteredSpeaking,
+      teachingExperience: filteredTeaching,
+      mentoring: filteredMentoring,
+      leadershipRoles: filteredLeadership,
+      internships: filteredInternships,
+      licenses: filteredLicenses,
+      references: filteredReferences,
+      socialMedia: socialMedia || {},
+      hobbies: hobbies || [],
+      interests: interests || [],
+      openSourceContributions: filteredOpenSource,
+      additionalInfo: additionalInfo || '',
+      location: location || '',
+      role: role || '',
       template: template || 'template1'
     });
 
@@ -392,6 +455,23 @@ const generateResumeFromPrompt = async (req, res) => {
     const filteredExperience = (resumeData.experience || []).filter(exp => exp.title && exp.company && exp.startDate && exp.description);
     const filteredSkills = (resumeData.skills || []).filter(skill => skill.name);
     const filteredProjects = (resumeData.projects || []).filter(project => project.name && project.description);
+    const filteredCertifications = (resumeData.certifications || []).filter(cert => cert.name);
+    const filteredTrainings = (resumeData.trainings || []).filter(training => training.name);
+    const filteredAwards = (resumeData.awards || []).filter(award => award.name);
+    const filteredLanguages = (resumeData.languages || []).filter(lang => lang.name);
+    const filteredPublications = (resumeData.publications || []).filter(pub => pub.title);
+    const filteredPatents = (resumeData.patents || []).filter(patent => patent.title);
+    const filteredVolunteerWork = (resumeData.volunteerWork || []).filter(vol => vol.organization);
+    const filteredMemberships = (resumeData.professionalMemberships || []).filter(mem => mem.organization);
+    const filteredConferences = (resumeData.conferences || []).filter(conf => conf.name);
+    const filteredSpeaking = (resumeData.speakingEngagements || []).filter(speak => speak.title);
+    const filteredTeaching = (resumeData.teachingExperience || []).filter(teach => teach.course);
+    const filteredMentoring = (resumeData.mentoring || []).filter(ment => ment.organization);
+    const filteredLeadership = (resumeData.leadershipRoles || []).filter(lead => lead.title);
+    const filteredInternships = (resumeData.internships || []).filter(intern => intern.title && intern.company);
+    const filteredLicenses = (resumeData.licenses || []).filter(lic => lic.name);
+    const filteredReferences = (resumeData.references || []).filter(ref => ref.name);
+    const filteredOpenSource = (resumeData.openSourceContributions || []).filter(os => os.project);
 
     // Create resume record (without userId)
     const resume = new Resume({
@@ -403,6 +483,29 @@ const generateResumeFromPrompt = async (req, res) => {
       experience: filteredExperience,
       skills: filteredSkills,
       projects: filteredProjects,
+      certifications: filteredCertifications,
+      trainings: filteredTrainings,
+      awards: filteredAwards,
+      languages: filteredLanguages,
+      publications: filteredPublications,
+      patents: filteredPatents,
+      volunteerWork: filteredVolunteerWork,
+      professionalMemberships: filteredMemberships,
+      conferences: filteredConferences,
+      speakingEngagements: filteredSpeaking,
+      teachingExperience: filteredTeaching,
+      mentoring: filteredMentoring,
+      leadershipRoles: filteredLeadership,
+      internships: filteredInternships,
+      licenses: filteredLicenses,
+      references: filteredReferences,
+      socialMedia: resumeData.socialMedia || {},
+      hobbies: resumeData.hobbies || [],
+      interests: resumeData.interests || [],
+      openSourceContributions: filteredOpenSource,
+      additionalInfo: resumeData.additionalInfo || '',
+      location: resumeData.location || '',
+      role: resumeData.role || '',
       template: template || 'template1'
     });
 
@@ -525,6 +628,98 @@ const updateResumeFromPrompt = async (req, res) => {
     
     if (updateData.projects && Array.isArray(updateData.projects) && updateData.projects.length > 0) {
       finalUpdateData.projects = updateData.projects.filter(project => project.name && project.description);
+    }
+    
+    if (updateData.certifications && Array.isArray(updateData.certifications) && updateData.certifications.length > 0) {
+      finalUpdateData.certifications = updateData.certifications.filter(cert => cert.name);
+    }
+    
+    if (updateData.trainings && Array.isArray(updateData.trainings) && updateData.trainings.length > 0) {
+      finalUpdateData.trainings = updateData.trainings.filter(training => training.name);
+    }
+    
+    if (updateData.awards && Array.isArray(updateData.awards) && updateData.awards.length > 0) {
+      finalUpdateData.awards = updateData.awards.filter(award => award.name);
+    }
+    
+    if (updateData.languages && Array.isArray(updateData.languages) && updateData.languages.length > 0) {
+      finalUpdateData.languages = updateData.languages.filter(lang => lang.name);
+    }
+    
+    if (updateData.publications && Array.isArray(updateData.publications) && updateData.publications.length > 0) {
+      finalUpdateData.publications = updateData.publications.filter(pub => pub.title);
+    }
+    
+    if (updateData.patents && Array.isArray(updateData.patents) && updateData.patents.length > 0) {
+      finalUpdateData.patents = updateData.patents.filter(patent => patent.title);
+    }
+    
+    if (updateData.volunteerWork && Array.isArray(updateData.volunteerWork) && updateData.volunteerWork.length > 0) {
+      finalUpdateData.volunteerWork = updateData.volunteerWork.filter(vol => vol.organization);
+    }
+    
+    if (updateData.professionalMemberships && Array.isArray(updateData.professionalMemberships) && updateData.professionalMemberships.length > 0) {
+      finalUpdateData.professionalMemberships = updateData.professionalMemberships.filter(mem => mem.organization);
+    }
+    
+    if (updateData.conferences && Array.isArray(updateData.conferences) && updateData.conferences.length > 0) {
+      finalUpdateData.conferences = updateData.conferences.filter(conf => conf.name);
+    }
+    
+    if (updateData.speakingEngagements && Array.isArray(updateData.speakingEngagements) && updateData.speakingEngagements.length > 0) {
+      finalUpdateData.speakingEngagements = updateData.speakingEngagements.filter(speak => speak.title);
+    }
+    
+    if (updateData.teachingExperience && Array.isArray(updateData.teachingExperience) && updateData.teachingExperience.length > 0) {
+      finalUpdateData.teachingExperience = updateData.teachingExperience.filter(teach => teach.course);
+    }
+    
+    if (updateData.mentoring && Array.isArray(updateData.mentoring) && updateData.mentoring.length > 0) {
+      finalUpdateData.mentoring = updateData.mentoring.filter(ment => ment.organization);
+    }
+    
+    if (updateData.leadershipRoles && Array.isArray(updateData.leadershipRoles) && updateData.leadershipRoles.length > 0) {
+      finalUpdateData.leadershipRoles = updateData.leadershipRoles.filter(lead => lead.title);
+    }
+    
+    if (updateData.internships && Array.isArray(updateData.internships) && updateData.internships.length > 0) {
+      finalUpdateData.internships = updateData.internships.filter(intern => intern.title && intern.company);
+    }
+    
+    if (updateData.licenses && Array.isArray(updateData.licenses) && updateData.licenses.length > 0) {
+      finalUpdateData.licenses = updateData.licenses.filter(lic => lic.name);
+    }
+    
+    if (updateData.references && Array.isArray(updateData.references) && updateData.references.length > 0) {
+      finalUpdateData.references = updateData.references.filter(ref => ref.name);
+    }
+    
+    if (updateData.openSourceContributions && Array.isArray(updateData.openSourceContributions) && updateData.openSourceContributions.length > 0) {
+      finalUpdateData.openSourceContributions = updateData.openSourceContributions.filter(os => os.project);
+    }
+    
+    if (updateData.socialMedia) {
+      finalUpdateData.socialMedia = updateData.socialMedia;
+    }
+    
+    if (updateData.hobbies && Array.isArray(updateData.hobbies)) {
+      finalUpdateData.hobbies = updateData.hobbies;
+    }
+    
+    if (updateData.interests && Array.isArray(updateData.interests)) {
+      finalUpdateData.interests = updateData.interests;
+    }
+    
+    if (updateData.additionalInfo) {
+      finalUpdateData.additionalInfo = updateData.additionalInfo;
+    }
+    
+    if (updateData.location) {
+      finalUpdateData.location = updateData.location;
+    }
+    
+    if (updateData.role) {
+      finalUpdateData.role = updateData.role;
     }
     
     // Add template if provided

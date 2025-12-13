@@ -24,6 +24,10 @@ import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
+import MultiPageTemplate1 from '../components/templates/MultiPageTemplate1';
+import MultiPageTemplate2 from '../components/templates/MultiPageTemplate2';
+import MultiPageTemplate3 from '../components/templates/MultiPageTemplate3';
+import { distributeContent } from '../utils/contentDistributor';
 import { generatePDF } from '../utils/pdfGenerator';
 import resumeApi from '../services/resumeApi';
 import AnalyticsModal from '../components/AnalyticsModal';
@@ -57,7 +61,10 @@ const getTemplateName = (templateId) => {
     'isabel-schumacher': 'Isabel Schumacher',
     'isabel-schumacher-glass': 'Isabel Schumacher Glass',
     'forest-green': 'Forest Green',
-    'navy-sidebar': 'Navy Sidebar'
+    'navy-sidebar': 'Navy Sidebar',
+    'multipage-template-1': 'Multi-Page Professional',
+    'multipage-template-2': 'Multi-Page Modern Tech',
+    'multipage-template-3': 'Multi-Page Creative'
   };
   return templateMap[templateId] || templateId || 'Unknown Template';
 };
@@ -338,7 +345,30 @@ export default function Dashboard() {
             : (typeof proj.technologies === 'string' 
               ? proj.technologies.split(',').map(t => t.trim()).filter(t => t)
               : [])
-        }))
+        })),
+        certifications: resume.certifications || [],
+        trainings: resume.trainings || [],
+        awards: resume.awards || [],
+        languages: resume.languages || [],
+        publications: resume.publications || [],
+        patents: resume.patents || [],
+        volunteerWork: resume.volunteerWork || [],
+        professionalMemberships: resume.professionalMemberships || [],
+        conferences: resume.conferences || [],
+        speakingEngagements: resume.speakingEngagements || [],
+        teachingExperience: resume.teachingExperience || [],
+        mentoring: resume.mentoring || [],
+        leadershipRoles: resume.leadershipRoles || [],
+        internships: resume.internships || [],
+        licenses: resume.licenses || [],
+        references: resume.references || [],
+        socialMedia: resume.socialMedia || {},
+        hobbies: resume.hobbies || [],
+        interests: resume.interests || [],
+        openSourceContributions: resume.openSourceContributions || [],
+        additionalInfo: resume.additionalInfo || '',
+        location: resume.location || '',
+        role: resume.role || ''
       };
 
       // Render the template (we'll use a simple approach)
@@ -396,12 +426,19 @@ export default function Dashboard() {
         TemplateComponent = OliviaWilsonDarkBlueTemplate;
       } else if (normalizedTemplate === 'phylis-flex') {
         TemplateComponent = PhylisFlexTemplate;
+      } else if (normalizedTemplate === 'multipage-template-1') {
+        TemplateComponent = MultiPageTemplate1;
+      } else if (normalizedTemplate === 'multipage-template-2') {
+        TemplateComponent = MultiPageTemplate2;
+      } else if (normalizedTemplate === 'multipage-template-3') {
+        TemplateComponent = MultiPageTemplate3;
       } else {
         // Default fallback to isabel-schumacher if template is missing or invalid
         // This handles cases where old resumes don't have a template field
         TemplateComponent = IsabelSchumacherTemplate;
       }
       
+      // For multi-page templates, use full data (template handles distribution internally)
       reactRoot.render(<TemplateComponent formData={templateData} />);
 
       // Wait for render
@@ -492,7 +529,30 @@ export default function Dashboard() {
           : (typeof proj.technologies === 'string' 
             ? proj.technologies.split(',').map(t => t.trim()).filter(t => t)
             : [])
-      }))
+      })),
+      certifications: resume.certifications || [],
+      trainings: resume.trainings || [],
+      awards: resume.awards || [],
+      languages: resume.languages || [],
+      publications: resume.publications || [],
+      patents: resume.patents || [],
+      volunteerWork: resume.volunteerWork || [],
+      professionalMemberships: resume.professionalMemberships || [],
+      conferences: resume.conferences || [],
+      speakingEngagements: resume.speakingEngagements || [],
+      teachingExperience: resume.teachingExperience || [],
+      mentoring: resume.mentoring || [],
+      leadershipRoles: resume.leadershipRoles || [],
+      internships: resume.internships || [],
+      licenses: resume.licenses || [],
+      references: resume.references || [],
+      socialMedia: resume.socialMedia || {},
+      hobbies: resume.hobbies || [],
+      interests: resume.interests || [],
+      openSourceContributions: resume.openSourceContributions || [],
+      additionalInfo: resume.additionalInfo || '',
+      location: resume.location || '',
+      role: resume.role || ''
     };
 
     // Use the appropriate template based on resume.template field
@@ -540,12 +600,20 @@ export default function Dashboard() {
       TemplateComponent = OliviaWilsonDarkBlueTemplate;
     } else if (normalizedTemplate === 'phylis-flex') {
       TemplateComponent = PhylisFlexTemplate;
+    } else if (normalizedTemplate === 'multipage-template-1') {
+      TemplateComponent = MultiPageTemplate1;
+    } else if (normalizedTemplate === 'multipage-template-2') {
+      TemplateComponent = MultiPageTemplate2;
+    } else if (normalizedTemplate === 'multipage-template-3') {
+      TemplateComponent = MultiPageTemplate3;
     } else {
       // Default fallback to isabel-schumacher if template is missing or invalid
       // This handles cases where old resumes don't have a template field
       TemplateComponent = IsabelSchumacherTemplate;
     }
 
+    // For multi-page templates, the template handles content distribution internally
+    // It will automatically distribute content across 3 pages with minimal gaps
     return <TemplateComponent formData={templateData} editable={editable} onChange={onChange} />;
   };
 
@@ -923,6 +991,11 @@ export default function Dashboard() {
                       <option value="catrine-ziv" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Catrine Ziv</option>
                       <option value="olivia-wilson-dark-blue" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Olivia Wilson Dark Blue</option>
                       <option value="phylis-flex" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Phylis Flex</option>
+                      <optgroup label="Multi-Page Templates" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+                        <option value="multipage-template-1" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Multi-Page Professional</option>
+                        <option value="multipage-template-2" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Multi-Page Modern Tech</option>
+                        <option value="multipage-template-3" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Multi-Page Creative</option>
+                      </optgroup>
                     </select>
                   </div>
                 )}

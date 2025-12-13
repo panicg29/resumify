@@ -139,7 +139,7 @@ export default function AIGenerateResume() {
     phone: '+1 (555) 123-4567',
     location: 'San Francisco, CA',
     role: 'Senior Software Engineer',
-    summary: 'Experienced professional with a proven track record in delivering high-quality results. Skilled in modern web technologies and passionate about creating innovative solutions.',
+    summary: 'Experienced professional with a proven track record in delivering high-quality results. Skilled in modern web technologies and passionate about creating innovative solutions. Over 8 years of experience in full-stack development, cloud architecture, and team leadership. Proven ability to design and implement scalable systems serving millions of users.',
     education: [
       {
         degree: 'Bachelor of Science in Computer Science',
@@ -152,6 +152,11 @@ export default function AIGenerateResume() {
         institution: 'Stanford University',
         year: 2022,
         gpa: '3.9'
+      },
+      {
+        degree: 'Certificate in Cloud Architecture',
+        institution: 'AWS Training',
+        year: 2023
       }
     ],
     experience: [
@@ -161,7 +166,7 @@ export default function AIGenerateResume() {
         startDate: 'Jan 2022',
         endDate: 'Present',
         current: true,
-        description: 'Leading development of scalable web applications. Architecting microservices and implementing CI/CD pipelines. Mentoring junior developers and conducting code reviews.'
+        description: 'Leading development of scalable web applications serving 10M+ users. Architecting microservices and implementing CI/CD pipelines. Mentoring junior developers and conducting code reviews. Reduced system latency by 40% through optimization initiatives.'
       },
       {
         title: 'Software Engineer',
@@ -169,7 +174,15 @@ export default function AIGenerateResume() {
         startDate: 'Jun 2020',
         endDate: 'Dec 2021',
         current: false,
-        description: 'Developed and maintained full-stack web applications using React and Node.js. Collaborated with cross-functional teams to deliver high-quality products.'
+        description: 'Developed and maintained full-stack web applications using React and Node.js. Collaborated with cross-functional teams to deliver high-quality products. Implemented automated testing reducing bugs by 60%.'
+      },
+      {
+        title: 'Junior Developer',
+        company: 'Web Solutions Ltd.',
+        startDate: 'Jan 2018',
+        endDate: 'May 2020',
+        current: false,
+        description: 'Built responsive web applications using modern JavaScript frameworks. Participated in agile development processes and code reviews. Contributed to open-source projects.'
       }
     ],
     skills: [
@@ -177,24 +190,59 @@ export default function AIGenerateResume() {
       { name: 'React', level: 'Expert' },
       { name: 'Node.js', level: 'Advanced' },
       { name: 'Python', level: 'Advanced' },
-      { name: 'AWS', level: 'Intermediate' },
-      { name: 'Docker', level: 'Intermediate' }
+      { name: 'AWS', level: 'Advanced' },
+      { name: 'Docker', level: 'Advanced' },
+      { name: 'Kubernetes', level: 'Intermediate' },
+      { name: 'TypeScript', level: 'Expert' },
+      { name: 'MongoDB', level: 'Advanced' },
+      { name: 'PostgreSQL', level: 'Advanced' },
+      { name: 'GraphQL', level: 'Intermediate' },
+      { name: 'Redis', level: 'Intermediate' },
+      { name: 'Git', level: 'Expert' },
+      { name: 'CI/CD', level: 'Advanced' },
+      { name: 'Microservices', level: 'Advanced' },
+      { name: 'REST APIs', level: 'Expert' },
+      { name: 'Agile/Scrum', level: 'Advanced' },
+      { name: 'System Design', level: 'Advanced' },
+      { name: 'Linux', level: 'Intermediate' },
+      { name: 'Terraform', level: 'Intermediate' }
     ],
     projects: [
       {
         name: 'E-Commerce Platform',
-        description: 'Built a full-stack e-commerce application with modern technologies. Implemented payment processing, inventory management, and user authentication.',
+        description: 'Built a full-stack e-commerce application with modern technologies. Implemented payment processing, inventory management, and user authentication. Handles 1M+ transactions monthly with 99.9% uptime.',
         technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
         url: 'https://example.com',
         github: 'https://github.com/example/project'
       },
       {
         name: 'Task Management App',
-        description: 'Developed a collaborative task management application with real-time updates and team collaboration features.',
+        description: 'Developed a collaborative task management application with real-time updates and team collaboration features. Used WebSocket for live updates and implemented advanced filtering.',
         technologies: ['React', 'Firebase', 'Material-UI'],
         url: 'https://example.com',
         github: 'https://github.com/example/tasks'
+      },
+      {
+        name: 'Cloud Infrastructure Automation',
+        description: 'Created automated infrastructure deployment system using Terraform and AWS. Reduced deployment time from 2 hours to 15 minutes.',
+        technologies: ['Terraform', 'AWS', 'Docker', 'Kubernetes'],
+        url: 'https://example.com',
+        github: 'https://github.com/example/infra'
       }
+    ],
+    certifications: [
+      { name: 'AWS Certified Solutions Architect', issuer: 'Amazon Web Services', date: '2023' },
+      { name: 'Google Cloud Professional Developer', issuer: 'Google Cloud', date: '2022' },
+      { name: 'Certified Kubernetes Administrator', issuer: 'CNCF', date: '2023' }
+    ],
+    awards: [
+      { name: 'Employee of the Year', organization: 'Tech Company Inc.', date: '2023' },
+      { name: 'Innovation Award', organization: 'StartupCo', date: '2021' }
+    ],
+    languages: [
+      { name: 'English', proficiency: 'Native' },
+      { name: 'Spanish', proficiency: 'Fluent' },
+      { name: 'French', proficiency: 'Intermediate' }
     ]
   };
 

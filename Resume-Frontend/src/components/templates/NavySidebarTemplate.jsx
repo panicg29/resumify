@@ -36,39 +36,27 @@ const formatRange = (start, end, current) => {
 
 const NavySidebarTemplate = ({ formData = {} }) => {
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    experience = [],
-    education = [],
-    skills = [],
-    projects = []
+    name = '', email = '', phone = '', summary = '', experience = [], education = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData;
 
-  const title =
-    formData.title ||
-    formData.role ||
-    formData.headline ||
-    (experience?.[0]?.title || 'Professional Title');
-  const address = formData.location || formData.address || formData.city || '';
-  const linkedin = formData.linkedin || formData.portfolio || '';
-  const website = formData.website || formData.url || '';
+  const title = role || formData.title || formData.headline || (experience?.[0]?.title || 'Professional Title');
+  const address = location || formData.address || formData.city || '';
+  const linkedin = socialMedia?.linkedin || formData.linkedin || formData.portfolio || '';
+  const website = socialMedia?.website || socialMedia?.portfolio || formData.website || formData.url || '';
 
   const skillList = skills.filter(skill => skill?.name).slice(0, 8);
   const softwareList = skills.filter(skill => skill?.name).slice(0, 6);
-  const languageList = (formData.languages && formData.languages.length
-    ? formData.languages
-    : skills.slice(6, 9)
-  ).filter(lang => lang);
+  const languageList = (languages && languages.length ? languages : skills.slice(6, 9)).filter(lang => lang);
 
-  const educationList = education.filter(
-    edu => edu?.degree || edu?.institution || edu?.year
-  );
+  const educationList = education.filter(edu => edu?.degree || edu?.institution || edu?.year);
   const experienceList = experience.filter(exp => exp?.title || exp?.company);
-
-  const interests = formData.interests || [];
-  const certifications = formData.certifications || formData.certs || [];
+  const interestsList = interests || [];
+  const certificationsList = certifications || formData.certs || [];
 
   return (
     <div
@@ -236,14 +224,14 @@ const NavySidebarTemplate = ({ formData = {} }) => {
           </div>
         )}
 
-        {certifications.length > 0 && (
+        {certificationsList.length > 0 && (
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-[#003b7a]">Certifications</h2>
             <ul className="space-y-2 text-sm text-gray-800">
-              {certifications.map((cert, idx) => (
+              {certificationsList.map((cert, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="block w-1 h-1 rounded-full bg-[#003b7a] mt-2" />
-                  <span>{typeof cert === 'string' ? cert : cert.name}</span>
+                  <span>{typeof cert === 'string' ? cert : (cert?.name || '')}</span>
                 </li>
               ))}
             </ul>
@@ -271,12 +259,67 @@ const NavySidebarTemplate = ({ formData = {} }) => {
           </div>
         )}
 
-        {interests.length > 0 && (
+        {interestsList.length > 0 && (
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold text-[#003b7a]">Interests</h2>
             <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
-              {interests.map((interest, idx) => (
-                <li key={idx}>{interest}</li>
+              {interestsList.map((interest, idx) => (
+                <li key={idx}>{typeof interest === 'string' ? interest : (interest?.name || interest?.title || '')}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {awards && awards.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-[#003b7a]">Awards</h2>
+            <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+              {awards.map((award, idx) => (
+                <li key={idx}>{typeof award === 'string' ? award : (award?.name || '')}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {publications && publications.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-[#003b7a]">Publications</h2>
+            <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+              {publications.slice(0, 3).map((pub, idx) => (
+                <li key={idx}>{pub?.title || ''} {pub?.journal && `- ${pub.journal}`}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {volunteerWork && volunteerWork.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-[#003b7a]">Volunteer Work</h2>
+            <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+              {volunteerWork.slice(0, 3).map((vol, idx) => (
+                <li key={idx}>{vol?.organization || ''} {vol?.role && `- ${vol.role}`}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {hobbies && hobbies.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-[#003b7a]">Hobbies</h2>
+            <div className="flex flex-wrap gap-2">
+              {hobbies.slice(0, 6).map((hobby, idx) => (
+                <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">{typeof hobby === 'string' ? hobby : (hobby?.name || hobby?.title || hobby)}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {trainings && trainings.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-[#003b7a]">Training</h2>
+            <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+              {trainings.slice(0, 3).map((training, idx) => (
+                <li key={idx}>{training?.name || ''} {training?.institution && `- ${training.institution}`}</li>
               ))}
             </ul>
           </div>

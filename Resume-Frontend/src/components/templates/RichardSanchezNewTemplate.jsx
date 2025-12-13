@@ -3,16 +3,12 @@ import EditableText from '../EditableText';
 
 const RichardSanchezNewTemplate = ({ formData = {}, editable = false, onChange = () => {} }) => {
   const {
-    name = '',
-    email = '',
-    phone = '',
-    summary = '',
-    education = [],
-    experience = [],
-    skills = [],
-    projects = [],
-    location = '',
-    role = ''
+    name = '', email = '', phone = '', summary = '', education = [], experience = [], skills = [],
+    projects = [], location = '', role = '', certifications = [], trainings = [], awards = [],
+    languages = [], publications = [], patents = [], volunteerWork = [], professionalMemberships = [],
+    conferences = [], speakingEngagements = [], teachingExperience = [], mentoring = [],
+    leadershipRoles = [], internships = [], licenses = [], references = [], socialMedia = {},
+    hobbies = [], interests = [], openSourceContributions = [], additionalInfo = ''
   } = formData;
 
   const bgColor = '#F5F5F5'; // Light gray
@@ -42,10 +38,10 @@ const RichardSanchezNewTemplate = ({ formData = {}, editable = false, onChange =
 
   return (
     <div 
-      className="w-[21cm] h-[29.7cm] mx-auto shadow-2xl relative"
+      className="w-[21cm] h-[29.7cm] mx-auto shadow-2xl relative overflow-hidden"
       style={{ fontFamily: 'Arial, sans-serif', backgroundColor: bgColor }}
     >
-      <div className="p-10">
+      <div className="p-8 h-full overflow-y-auto">
         {/* Header Section with Name, Title, and Contact */}
         <div className="mb-8">
           <div className="flex items-start gap-6 mb-4">
@@ -412,17 +408,17 @@ const RichardSanchezNewTemplate = ({ formData = {}, editable = false, onChange =
         </div>
 
         {/* PROFESSIONAL SKILL Section */}
-        <div className="mb-8">
-          <div className="flex items-center mb-3">
+        <div className="mb-6">
+          <div className="flex items-center mb-2">
             <h3 
               className="font-bold uppercase mr-4"
-              style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}
+              style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}
             >
               PROFESSIONAL SKILL
             </h3>
             <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {skills && skills.length > 0 ? (
               skills.map((skill, index) => (
                 <div key={index} className="flex items-start gap-2">
@@ -477,35 +473,417 @@ const RichardSanchezNewTemplate = ({ formData = {}, editable = false, onChange =
         </div>
 
         {/* LANGUAGES Section */}
-        <div>
-          <div className="flex items-center mb-3">
-            <h3 
-              className="font-bold uppercase mr-4"
-              style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}
-            >
-              LANGUAGES
-            </h3>
-            <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+        {((languages && languages.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-2">
+              <h3 
+                className="font-bold uppercase mr-4"
+                style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}
+              >
+                LANGUAGES
+              </h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {languages && languages.length > 0 ? (
+                languages.map((lang, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <span className="mt-1">•</span>
+                    <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                      <EditableText value={lang.name || ''} placeholder="Language" editable={editable} onChange={(val) => onChange(`languages.${index}.name`, val)} />
+                      {' ('}
+                      <EditableText value={lang.proficiency || 'Fluent'} placeholder="Proficiency" editable={editable} onChange={(val) => onChange(`languages.${index}.proficiency`, val)} />
+                      {')'}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-1">•</span>
+                    <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>English (Fluent)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-1">•</span>
+                    <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>German (Basics)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-1">•</span>
+                    <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>French (Fluent)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-1">•</span>
+                    <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>Spanish (Basics)</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-start gap-2">
-              <span className="mt-1">•</span>
-              <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>English (Fluent)</span>
+        )}
+
+        {/* ALL ADDITIONAL FIELDS - Compact */}
+        {((certifications && certifications.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>CERTIFICATIONS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
             </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-1">•</span>
-              <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>German (Basics)</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-1">•</span>
-              <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>French (Fluent)</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-1">•</span>
-              <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>Spanish (Basics)</span>
+            <div className="grid grid-cols-2 gap-3">
+              {(certifications || []).slice(0, 4).map((cert, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '11px', color: textDark }}>
+                    <EditableText value={cert.name || ''} placeholder="Certification" editable={editable} onChange={(val) => onChange(`certifications.${index}.name`, val)} />
+                    {cert.issuer && <span> - {cert.issuer}</span>}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
+
+        {((trainings && trainings.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>TRAININGS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(trainings || []).map((training, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={training.name || ''} placeholder="Training" editable={editable} onChange={(val) => onChange(`trainings.${index}.name`, val)} />
+                    {training.institution && <span> - {training.institution}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((awards && awards.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>AWARDS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(awards || []).map((award, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={award.name || ''} placeholder="Award" editable={editable} onChange={(val) => onChange(`awards.${index}.name`, val)} />
+                    {award.organization && <span> - {award.organization}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((publications && publications.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>PUBLICATIONS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(publications || []).map((pub, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={pub.title || ''} placeholder="Publication" editable={editable} onChange={(val) => onChange(`publications.${index}.title`, val)} />
+                    {pub.journal && <span> - {pub.journal}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((patents && patents.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>PATENTS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(patents || []).map((patent, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={patent.title || ''} placeholder="Patent" editable={editable} onChange={(val) => onChange(`patents.${index}.title`, val)} />
+                    {patent.patentNumber && <span> - {patent.patentNumber}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((volunteerWork && volunteerWork.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>VOLUNTEER WORK</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(volunteerWork || []).map((vol, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={vol.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`volunteerWork.${index}.organization`, val)} />
+                    {vol.role && <span> - {vol.role}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((professionalMemberships && professionalMemberships.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>MEMBERSHIPS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(professionalMemberships || []).map((mem, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={mem.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`professionalMemberships.${index}.organization`, val)} />
+                    {mem.role && <span> - {mem.role}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((conferences && conferences.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>CONFERENCES</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(conferences || []).map((conf, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={conf.name || ''} placeholder="Conference" editable={editable} onChange={(val) => onChange(`conferences.${index}.name`, val)} />
+                    {conf.location && <span> - {conf.location}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((speakingEngagements && speakingEngagements.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>SPEAKING</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(speakingEngagements || []).map((speak, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={speak.title || ''} placeholder="Speaking Title" editable={editable} onChange={(val) => onChange(`speakingEngagements.${index}.title`, val)} />
+                    {speak.event && <span> - {speak.event}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((teachingExperience && teachingExperience.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>TEACHING</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(teachingExperience || []).map((teach, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={teach.course || ''} placeholder="Course" editable={editable} onChange={(val) => onChange(`teachingExperience.${index}.course`, val)} />
+                    {teach.institution && <span> - {teach.institution}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((mentoring && mentoring.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>MENTORING</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(mentoring || []).map((ment, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={ment.organization || ''} placeholder="Organization" editable={editable} onChange={(val) => onChange(`mentoring.${index}.organization`, val)} />
+                    {ment.focus && <span> - {ment.focus}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((leadershipRoles && leadershipRoles.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>LEADERSHIP</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(leadershipRoles || []).map((lead, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={lead.title || ''} placeholder="Leadership Role" editable={editable} onChange={(val) => onChange(`leadershipRoles.${index}.title`, val)} />
+                    {lead.organization && <span> - {lead.organization}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((internships && internships.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>INTERNSHIPS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(internships || []).map((intern, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={intern.title || ''} placeholder="Internship Title" editable={editable} onChange={(val) => onChange(`internships.${index}.title`, val)} />
+                    {intern.company && <span> - {intern.company}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((licenses && licenses.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>LICENSES</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(licenses || []).map((lic, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={lic.name || ''} placeholder="License" editable={editable} onChange={(val) => onChange(`licenses.${index}.name`, val)} />
+                    {lic.issuingOrganization && <span> - {lic.issuingOrganization}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((references && references.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>REFERENCES</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(references || []).map((ref, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={ref.name || ''} placeholder="Reference Name" editable={editable} onChange={(val) => onChange(`references.${index}.name`, val)} />
+                    {ref.title && <span> - {ref.title}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((openSourceContributions && openSourceContributions.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>OPEN SOURCE</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {(openSourceContributions || []).map((os, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="mt-1">•</span>
+                  <span className="text-sm" style={{ fontSize: '12px', color: textDark }}>
+                    <EditableText value={os.project || ''} placeholder="Project" editable={editable} onChange={(val) => onChange(`openSourceContributions.${index}.project`, val)} />
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((hobbies && hobbies.length > 0) || editable) && (
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '14px', color: blueColor, letterSpacing: '1px' }}>HOBBIES</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(hobbies || []).map((hobby, index) => (
+                <span key={index} className="px-2 py-1 text-xs border" style={{ fontSize: '11px', borderColor: blueColor, color: textDark }}>
+                  {typeof hobby === 'string' ? hobby : (hobby?.name || hobby?.title || hobby)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((interests && interests.length > 0) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>INTERESTS</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(interests || []).map((interest, index) => (
+                <span key={index} className="px-2 py-1 text-xs border" style={{ fontSize: '11px', borderColor: blueColor, color: textDark }}>
+                  {typeof interest === 'string' ? interest : (interest?.name || interest?.title || interest)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {((additionalInfo && additionalInfo.trim()) || editable) && (
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
+              <h3 className="font-bold uppercase mr-4" style={{ fontSize: '13px', color: blueColor, letterSpacing: '1px' }}>ADDITIONAL INFO</h3>
+              <div className="flex-1 border-t" style={{ borderColor: blueColor, borderWidth: '2px' }}></div>
+            </div>
+            <div className="text-sm leading-relaxed" style={{ fontSize: '12px', color: textDark }}>
+              <EditableText value={additionalInfo || ''} placeholder="Additional information" editable={editable} onChange={(val) => onChange('additionalInfo', val)} multiline />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

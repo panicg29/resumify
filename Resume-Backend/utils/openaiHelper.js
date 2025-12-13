@@ -88,25 +88,246 @@ const parseResumeWithAI = async (resumeText) => {
           "url": "Project URL if mentioned",
           "github": "GitHub URL if mentioned"
         }
-      ]
+      ],
+      "certifications": [
+        {
+          "name": "Certification name",
+          "issuer": "Issuing organization",
+          "date": "2023-01-01",
+          "expiryDate": "2026-01-01",
+          "credentialId": "Credential ID if mentioned",
+          "url": "Certification URL if mentioned"
+        }
+      ],
+      "trainings": [
+        {
+          "name": "Training or course name",
+          "institution": "Training institution",
+          "date": "2023-01-01",
+          "duration": "40 hours",
+          "description": "Training description"
+        }
+      ],
+      "awards": [
+        {
+          "name": "Award name",
+          "organization": "Awarding organization",
+          "year": "2023",
+          "description": "Award description"
+        }
+      ],
+      "languages": [
+        {
+          "name": "Language name",
+          "proficiency": "Fluent"
+        }
+      ],
+      "publications": [
+        {
+          "title": "Publication title",
+          "authors": "Author names",
+          "journal": "Journal or conference name",
+          "year": "2023",
+          "doi": "DOI if available",
+          "url": "URL if available",
+          "type": "Journal Article"
+        }
+      ],
+      "patents": [
+        {
+          "title": "Patent title",
+          "patentNumber": "Patent number",
+          "issuedDate": "2023-01-01",
+          "inventors": "Inventor names",
+          "description": "Patent description",
+          "url": "URL if available"
+        }
+      ],
+      "volunteerWork": [
+        {
+          "organization": "Organization name",
+          "role": "Volunteer role",
+          "startDate": "2023-01-01",
+          "endDate": "2023-12-31",
+          "current": false,
+          "description": "Volunteer work description",
+          "hoursPerWeek": "5 hours"
+        }
+      ],
+      "professionalMemberships": [
+        {
+          "organization": "Organization name",
+          "role": "Member role",
+          "startDate": "2023-01-01",
+          "endDate": "",
+          "current": true,
+          "description": "Membership description"
+        }
+      ],
+      "conferences": [
+        {
+          "name": "Conference name",
+          "location": "City, Country",
+          "date": "2023-06-15",
+          "type": "Presented",
+          "description": "Conference description"
+        }
+      ],
+      "speakingEngagements": [
+        {
+          "title": "Talk title",
+          "event": "Event name",
+          "location": "Location",
+          "date": "2023-05-10",
+          "description": "Talk description",
+          "url": "URL if available"
+        }
+      ],
+      "teachingExperience": [
+        {
+          "course": "Course name",
+          "institution": "Institution name",
+          "startDate": "2023-01-01",
+          "endDate": "2023-05-31",
+          "current": false,
+          "description": "Teaching description",
+          "level": "Undergraduate"
+        }
+      ],
+      "mentoring": [
+        {
+          "menteeName": "Mentee name (optional)",
+          "organization": "Organization name",
+          "startDate": "2023-01-01",
+          "endDate": "",
+          "current": true,
+          "description": "Mentoring description",
+          "focus": "Career development"
+        }
+      ],
+      "leadershipRoles": [
+        {
+          "title": "Leadership title",
+          "organization": "Organization name",
+          "startDate": "2023-01-01",
+          "endDate": "",
+          "current": true,
+          "description": "Leadership description"
+        }
+      ],
+      "internships": [
+        {
+          "title": "Internship title",
+          "company": "Company name",
+          "startDate": "2023-06-01",
+          "endDate": "2023-08-31",
+          "description": "Internship description"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "License name",
+          "issuingOrganization": "Issuing organization",
+          "licenseNumber": "License number",
+          "issueDate": "2023-01-01",
+          "expiryDate": "2026-01-01",
+          "state": "State if applicable"
+        }
+      ],
+      "references": [
+        {
+          "name": "Reference name",
+          "title": "Job title",
+          "company": "Company name",
+          "email": "email@example.com",
+          "phone": "+1-555-000-0000",
+          "relationship": "Former Manager"
+        }
+      ],
+      "socialMedia": {
+        "linkedin": "LinkedIn profile URL",
+        "github": "GitHub profile URL",
+        "twitter": "Twitter profile URL",
+        "portfolio": "Portfolio website URL",
+        "website": "Personal website URL",
+        "blog": "Blog URL",
+        "behance": "Behance profile URL",
+        "dribbble": "Dribbble profile URL",
+        "medium": "Medium profile URL",
+        "stackoverflow": "Stack Overflow profile URL"
+      },
+      "hobbies": ["Hobby 1", "Hobby 2"],
+      "interests": ["Interest 1", "Interest 2"],
+      "openSourceContributions": [
+        {
+          "project": "Project name",
+          "url": "Project URL",
+          "description": "Contribution description",
+          "contributions": "What you contributed"
+        }
+      ],
+      "additionalInfo": "Any other relevant information that doesn't fit into structured fields",
+      "location": "City, State/Country",
+      "role": "Current or desired role/title"
     }
 
-    IMPORTANT RULES:
+    CRITICAL EXTRACTION RULES:
     1. Return ONLY the JSON object, no additional text or markdown formatting
-    2. Use null for missing endDate in experience if current job
-    3. Set current: true for ongoing positions
-    4. Use skill levels: "Beginner", "Intermediate", "Advanced", "Expert"
-    5. If information is not available, use empty string "" or empty array []
-    6. For dates, use YYYY-MM-DD format (use January 1st if only year available)
-    7. Extract technologies from project descriptions
-    8. Ensure all required fields are present even if empty
-    9. If the text is garbled or unclear, make your best guess based on available information
-    10. Look for name patterns at the beginning of the text
-    11. Look for email patterns anywhere in the text (user@domain.com format)
-    12. If no clear name is found, use "Unknown" as the name
-    13. If no email is found, use "unknown@example.com" as the email
-    14. If no summary is provided, create one based on the job title and experience mentioned
-    15. Ensure summary is never empty - create a professional summary from available information
+    2. Extract EVERY piece of information from the resume - DO NOT skip any data
+    3. If data doesn't fit into a specific field, use the most appropriate field or add to "additionalInfo"
+    4. Use null for missing endDate in experience if current job
+    5. Set current: true for ongoing positions, memberships, volunteer work, etc.
+    6. Use skill levels: "Beginner", "Intermediate", "Advanced", "Expert"
+    7. If information is not available, use empty string "" or empty array []
+    8. For dates, use YYYY-MM-DD format (use January 1st if only year available)
+    9. Extract technologies from project descriptions
+    10. Ensure all required fields are present even if empty
+    11. If the text is garbled or unclear, make your best guess based on available information
+    12. Look for name patterns at the beginning of the text
+    13. Look for email patterns anywhere in the text (user@domain.com format)
+    14. If no clear name is found, use "Unknown" as the name
+    15. If no email is found, use "unknown@example.com" as the email
+    16. If no summary is provided, create one based on the job title and experience mentioned
+    17. Ensure summary is never empty - create a professional summary from available information
+    
+    COMPREHENSIVE DATA EXTRACTION:
+    18. Extract ALL certifications, professional trainings, courses, and certificates mentioned
+    19. Extract ALL awards, honors, recognitions, and achievements mentioned
+    20. Extract ALL languages with their proficiency levels (use: "Basic", "Conversational", "Intermediate", "Fluent", "Native", "Professional")
+    21. Extract ALL research papers, publications, articles, blog posts, books, theses, dissertations
+    22. Extract ALL patents, inventions, and intellectual property
+    23. Extract ALL volunteer work, community service, and pro bono activities
+    24. Extract ALL professional memberships, associations, societies, and organizations
+    25. Extract ALL conference attendance, presentations, workshops, seminars, webinars
+    26. Extract ALL speaking engagements, talks, keynotes, panels, interviews
+    27. Extract ALL teaching experience, courses taught, guest lectures, tutoring
+    28. Extract ALL mentoring activities, coaching, advising
+    29. Extract ALL leadership roles, board positions, committee memberships
+    30. Extract ALL internships, co-ops, apprenticeships
+    31. Extract ALL professional licenses, permits, registrations
+    32. Extract ALL references with contact information if provided
+    33. Extract ALL social media profiles (LinkedIn, GitHub, Twitter, portfolio, website, blog, etc.)
+    34. Extract ALL hobbies, interests, and personal activities
+    35. Extract ALL open source contributions, GitHub projects, code repositories
+    36. Extract location/address information
+    37. Extract current or desired role/title
+    
+    SECTION RECOGNITION:
+    38. Look for sections with various titles: "Publications", "Research", "Papers", "Articles", "Patents", "Volunteer", "Community Service", "Memberships", "Associations", "Conferences", "Presentations", "Speaking", "Teaching", "Mentoring", "Leadership", "Internships", "Licenses", "References", "Contact", "Links", "Social Media", "Hobbies", "Interests", "Open Source", "Contributions", "Additional", "Other", "Miscellaneous", etc.
+    39. If only year is available for dates, use YYYY-01-01 format
+    40. For publications, identify type: "Journal Article", "Conference Paper", "Book Chapter", "Book", "Blog Post", "Article", "Research Paper", "Thesis", "Dissertation", or "Other"
+    41. For conferences, identify type: "Attended", "Presented", "Keynote", "Workshop", "Panel", "Poster", or "Other"
+    42. For teaching, identify level: "Undergraduate", "Graduate", "Professional", "Workshop", "Seminar", or "Other"
+    
+    HANDLING UNSTRUCTURED DATA:
+    43. If you encounter information that doesn't clearly fit into any structured field, try to categorize it appropriately
+    44. For ambiguous entries, use the most relevant field (e.g., "Professional Development" could be trainings or certifications)
+    45. If information is clearly relevant but doesn't fit any field, add it to "additionalInfo" field
+    46. DO NOT discard any information - always find a place for it in the structured format
+    47. If multiple fields could apply, choose the most specific one (e.g., prefer "publications" over "additionalInfo" for research papers)
+    48. Extract all URLs, links, and contact information you find
+    49. Extract all dates, even if approximate
+    50. Preserve all details - better to have too much information than too little
 
     Resume text:
     ${processedText}

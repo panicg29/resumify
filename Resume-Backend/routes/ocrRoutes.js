@@ -141,6 +141,74 @@ router.post('/file', upload.single('file'), async (req, res) => {
             project => project.name && project.description
           );
           
+          const filteredCertifications = (resumeData.certifications || []).filter(
+            cert => cert.name
+          );
+          
+          const filteredTrainings = (resumeData.trainings || []).filter(
+            training => training.name
+          );
+          
+          const filteredAwards = (resumeData.awards || []).filter(
+            award => award.name
+          );
+          
+          const filteredLanguages = (resumeData.languages || []).filter(
+            lang => lang.name
+          );
+          
+          const filteredPublications = (resumeData.publications || []).filter(
+            pub => pub.title
+          );
+          
+          const filteredPatents = (resumeData.patents || []).filter(
+            patent => patent.title
+          );
+          
+          const filteredVolunteerWork = (resumeData.volunteerWork || []).filter(
+            vol => vol.organization
+          );
+          
+          const filteredMemberships = (resumeData.professionalMemberships || []).filter(
+            mem => mem.organization
+          );
+          
+          const filteredConferences = (resumeData.conferences || []).filter(
+            conf => conf.name
+          );
+          
+          const filteredSpeaking = (resumeData.speakingEngagements || []).filter(
+            speak => speak.title
+          );
+          
+          const filteredTeaching = (resumeData.teachingExperience || []).filter(
+            teach => teach.course
+          );
+          
+          const filteredMentoring = (resumeData.mentoring || []).filter(
+            ment => ment.organization
+          );
+          
+          const filteredLeadership = (resumeData.leadershipRoles || []).filter(
+            lead => lead.title
+          );
+          
+          const filteredInternships = (resumeData.internships || []).filter(
+            intern => intern.title && intern.company
+          );
+          
+          const filteredLicenses = (resumeData.licenses || []).filter(
+            lic => lic.name
+          );
+          
+          const filteredReferences = (resumeData.references || []).filter(
+            ref => ref.name
+          );
+          
+          const filteredOpenSource = (resumeData.openSourceContributions || []).filter(
+            os => os.project
+          );
+          
           // Create and save resume to database
           const Resume = require('../models/resumeModel');
           const resume = new Resume({
@@ -153,6 +221,29 @@ router.post('/file', upload.single('file'), async (req, res) => {
             experience: filteredExperience,
             skills: filteredSkills,
             projects: filteredProjects,
+            certifications: filteredCertifications,
+            trainings: filteredTrainings,
+            awards: filteredAwards,
+            languages: filteredLanguages,
+            publications: filteredPublications,
+            patents: filteredPatents,
+            volunteerWork: filteredVolunteerWork,
+            professionalMemberships: filteredMemberships,
+            conferences: filteredConferences,
+            speakingEngagements: filteredSpeaking,
+            teachingExperience: filteredTeaching,
+            mentoring: filteredMentoring,
+            leadershipRoles: filteredLeadership,
+            internships: filteredInternships,
+            licenses: filteredLicenses,
+            references: filteredReferences,
+            socialMedia: resumeData.socialMedia || {},
+            hobbies: resumeData.hobbies || [],
+            interests: resumeData.interests || [],
+            openSourceContributions: filteredOpenSource,
+            additionalInfo: resumeData.additionalInfo || '',
+            location: resumeData.location || '',
+            role: resumeData.role || '',
             template: req.body.template || 'template1'
           });
 

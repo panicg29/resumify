@@ -11,13 +11,12 @@ import RichardSanchezNewTemplate from './components/templates/RichardSanchezNewT
 import DanielGallegoTemplate from './components/templates/DanielGallegoTemplate';
 import ClaudiaAlvesTemplate from './components/templates/ClaudiaAlvesTemplate';
 import BartholomewHendersonTemplate from './components/templates/BartholomewHendersonTemplate';
-import FranciscoAndradeTemplate from './components/templates/FranciscoAndradeTemplate';
-import OliviaWilsonTemplate from './components/templates/OliviaWilsonTemplate';
-import EstelleDarcyTemplate from './components/templates/EstelleDarcyTemplate';
-import JulianaSilvaTemplate from './components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from './components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from './components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from './components/templates/PhylisFlexTemplate';
+import MultiPageTemplate1 from './components/templates/MultiPageTemplate1';
+import MultiPageTemplate2 from './components/templates/MultiPageTemplate2';
+import MultiPageTemplate3 from './components/templates/MultiPageTemplate3';
 import LightRays from './components/react-bits/LightRays';
 import TemplateTiltedCard from './components/TemplateTiltedCard';
 import LandingHeader from './components/landing/LandingHeader';
@@ -34,12 +33,21 @@ export default function TemplateGallery() {
     linkedin: 'linkedin.com/in/alexchen',
     role: 'Senior Full Stack Engineer',
     title: 'Senior Full Stack Engineer',
-    summary: 'Innovative software engineer with 6+ years of experience in cutting-edge technologies. Specialized in AI/ML, cloud architecture, and full-stack development. Passionate about creating scalable solutions and leading technical teams to deliver exceptional results.',
+    summary: 'Innovative software engineer with 8+ years of experience in cutting-edge technologies. Specialized in AI/ML, cloud architecture, and full-stack development. Passionate about creating scalable solutions and leading technical teams to deliver exceptional results. Proven track record of building systems serving millions of users with 99.9% uptime.',
     education: [{
       degree: 'Master of Computer Science',
       institution: 'Stanford University',
       year: 2018,
       gpa: '4.0'
+    }, {
+      degree: 'Bachelor of Science in Computer Science',
+      institution: 'UC Berkeley',
+      year: 2016,
+      gpa: '3.9'
+    }, {
+      degree: 'Certificate in Cloud Architecture',
+      institution: 'AWS Training',
+      year: 2023
     }],
     experience: [{
       company: 'TechVision Inc.',
@@ -48,8 +56,23 @@ export default function TemplateGallery() {
       endDate: 'Present',
       current: true,
       location: 'San Francisco, CA',
-      description: 'Led development of AI-powered applications serving 2M+ users. Architected microservices infrastructure and implemented advanced CI/CD pipelines. Mentored junior developers and established coding standards.',
-      achievements: 'Increased application performance by 40% through optimization techniques'
+      description: 'Led development of AI-powered applications serving 2M+ users. Architected microservices infrastructure and implemented advanced CI/CD pipelines. Mentored junior developers and established coding standards. Reduced system latency by 40% through optimization initiatives.'
+    }, {
+      company: 'StartupCo',
+      title: 'Full Stack Developer',
+      startDate: 'Jun 2019',
+      endDate: 'Feb 2021',
+      current: false,
+      location: 'San Francisco, CA',
+      description: 'Developed and maintained full-stack web applications using React and Node.js. Collaborated with cross-functional teams to deliver high-quality products. Implemented automated testing reducing bugs by 60%.'
+    }, {
+      company: 'Web Solutions Ltd.',
+      title: 'Junior Developer',
+      startDate: 'Jan 2018',
+      endDate: 'May 2019',
+      current: false,
+      location: 'San Francisco, CA',
+      description: 'Built responsive web applications using modern JavaScript frameworks. Participated in agile development processes and code reviews. Contributed to open-source projects.'
     }],
     skills: [{
       name: 'Python',
@@ -59,18 +82,109 @@ export default function TemplateGallery() {
       level: 'Expert'
     }, {
       name: 'React',
+      level: 'Expert'
+    }, {
+      name: 'Node.js',
       level: 'Advanced'
     }, {
       name: 'AWS',
       level: 'Advanced'
+    }, {
+      name: 'Docker',
+      level: 'Advanced'
+    }, {
+      name: 'Kubernetes',
+      level: 'Intermediate'
+    }, {
+      name: 'TypeScript',
+      level: 'Expert'
+    }, {
+      name: 'MongoDB',
+      level: 'Advanced'
+    }, {
+      name: 'PostgreSQL',
+      level: 'Advanced'
+    }, {
+      name: 'GraphQL',
+      level: 'Intermediate'
+    }, {
+      name: 'Redis',
+      level: 'Intermediate'
+    }, {
+      name: 'Git',
+      level: 'Expert'
+    }, {
+      name: 'CI/CD',
+      level: 'Advanced'
+    }, {
+      name: 'Microservices',
+      level: 'Advanced'
+    }, {
+      name: 'REST APIs',
+      level: 'Expert'
+    }, {
+      name: 'Agile/Scrum',
+      level: 'Advanced'
+    }, {
+      name: 'System Design',
+      level: 'Advanced'
+    }, {
+      name: 'Linux',
+      level: 'Intermediate'
+    }, {
+      name: 'Terraform',
+      level: 'Intermediate'
     }],
     projects: [{
       name: 'AI-Powered Analytics Platform',
-      description: 'Developed a comprehensive analytics platform using machine learning algorithms to provide real-time insights and predictive analytics for business intelligence.',
+      description: 'Developed a comprehensive analytics platform using machine learning algorithms to provide real-time insights and predictive analytics for business intelligence. Handles 1M+ transactions monthly with 99.9% uptime.',
       technologies: ['Python', 'TensorFlow', 'React', 'Node.js', 'AWS', 'Docker', 'PostgreSQL'],
-      date: '2022 - 2023',
-      location: 'Remote',
-      outcome: 'Successfully deployed to production serving 500K+ users'
+      url: 'https://example.com',
+      github: 'https://github.com/example/analytics'
+    }, {
+      name: 'Cloud Infrastructure Automation',
+      description: 'Created automated infrastructure deployment system using Terraform and AWS. Reduced deployment time from 2 hours to 15 minutes.',
+      technologies: ['Terraform', 'AWS', 'Docker', 'Kubernetes'],
+      url: 'https://example.com',
+      github: 'https://github.com/example/infra'
+    }, {
+      name: 'Task Management App',
+      description: 'Developed a collaborative task management application with real-time updates and team collaboration features. Used WebSocket for live updates.',
+      technologies: ['React', 'Firebase', 'Material-UI'],
+      url: 'https://example.com',
+      github: 'https://github.com/example/tasks'
+    }],
+    certifications: [{
+      name: 'AWS Certified Solutions Architect',
+      issuer: 'Amazon Web Services',
+      date: '2023'
+    }, {
+      name: 'Google Cloud Professional Developer',
+      issuer: 'Google Cloud',
+      date: '2022'
+    }, {
+      name: 'Certified Kubernetes Administrator',
+      issuer: 'CNCF',
+      date: '2023'
+    }],
+    awards: [{
+      name: 'Employee of the Year',
+      organization: 'TechVision Inc.',
+      date: '2023'
+    }, {
+      name: 'Innovation Award',
+      organization: 'StartupCo',
+      date: '2021'
+    }],
+    languages: [{
+      name: 'English',
+      proficiency: 'Native'
+    }, {
+      name: 'Spanish',
+      proficiency: 'Fluent'
+    }, {
+      name: 'French',
+      proficiency: 'Intermediate'
     }],
     achievements: [{
       title: 'Tech Innovation Award',
@@ -80,9 +194,30 @@ export default function TemplateGallery() {
       title: 'Advanced Machine Learning',
       name: 'Advanced Machine Learning'
     }],
-    interests: [{
-      name: 'Open Source Contribution',
-      title: 'Open Source Contribution'
+    interests: ['Open Source Contribution', 'Machine Learning Research', 'Tech Blogging'],
+    hobbies: ['Photography', 'Hiking', 'Reading'],
+    certifications: [{
+      name: 'AWS Certified Solutions Architect',
+      issuer: 'Amazon Web Services',
+      date: '2023'
+    }],
+    trainings: [{
+      name: 'Advanced Machine Learning',
+      institution: 'Coursera',
+      date: '2023'
+    }],
+    publications: [{
+      title: 'Scalable Microservices Architecture',
+      journal: 'IEEE Software',
+      year: '2023'
+    }],
+    volunteerWork: [{
+      organization: 'Code for Good',
+      role: 'Volunteer Developer'
+    }],
+    professionalMemberships: [{
+      organization: 'IEEE Computer Society',
+      role: 'Member'
     }]
   });
 
@@ -169,42 +304,6 @@ export default function TemplateGallery() {
       color: 'from-blue-900 to-blue-950'
     },
     {
-      id: 'francisco-andrade',
-      name: 'Francisco Andrade',
-      description: 'Light gray sidebar with dark blue header and white main content',
-      category: 'Professional',
-      component: FranciscoAndradeTemplate,
-      features: ['Gray sidebar', 'Blue header', 'Professional', 'Two-column', 'Reference section'],
-      color: 'from-blue-700 to-blue-900'
-    },
-    {
-      id: 'olivia-wilson',
-      name: 'Olivia Wilson',
-      description: 'Elegant two-column design with light peach/beige sidebar and off-white main content',
-      category: 'Professional',
-      component: OliviaWilsonTemplate,
-      features: ['Peach sidebar', 'Off-white theme', 'Professional', 'Two-column', 'Decorative elements'],
-      color: 'from-purple-700 to-purple-900'
-    },
-    {
-      id: 'estelle-darcy',
-      name: 'Estelle Darcy',
-      description: 'Clean two-column design with light grey sidebar and white main content',
-      category: 'Professional',
-      component: EstelleDarcyTemplate,
-      features: ['Light grey sidebar', 'White theme', 'Professional', 'Two-column', 'Content Creator'],
-      color: 'from-gray-400 to-gray-600'
-    },
-    {
-      id: 'juliana-silva',
-      name: 'Juliana Silva',
-      description: 'Elegant two-column design with light peach/beige sidebar and off-white main content',
-      category: 'Professional',
-      component: JulianaSilvaTemplate,
-      features: ['Peach sidebar', 'Off-white theme', 'Professional', 'Two-column', 'Senior Graphic Designer'],
-      color: 'from-amber-300 to-amber-500'
-    },
-    {
       id: 'catrine-ziv',
       name: 'Catrine Ziv',
       description: 'Professional two-column design with dark green-grey sidebar and light off-white main content',
@@ -230,6 +329,33 @@ export default function TemplateGallery() {
       component: PhylisFlexTemplate,
       features: ['Light gray header', 'Two-column', 'Professional', 'Graphic Designer'],
       color: 'from-gray-300 to-gray-500'
+    },
+    {
+      id: 'multipage-template-1',
+      name: 'Multi-Page Professional',
+      description: '3-page corporate style resume with dark blue header and comprehensive content distribution',
+      category: 'Multi-Page',
+      component: MultiPageTemplate1,
+      features: ['3 pages', 'Dark blue header', 'Corporate style', 'Professional', 'Content-filled'],
+      color: 'from-blue-700 to-blue-900'
+    },
+    {
+      id: 'multipage-template-2',
+      name: 'Multi-Page Modern Tech',
+      description: '3-page modern tech resume with gradient design and contemporary layout',
+      category: 'Multi-Page',
+      component: MultiPageTemplate2,
+      features: ['3 pages', 'Gradient design', 'Modern tech', 'Blue theme', 'Content-filled'],
+      color: 'from-blue-500 to-indigo-600'
+    },
+    {
+      id: 'multipage-template-3',
+      name: 'Multi-Page Creative',
+      description: '3-page creative resume with purple sidebar and bold visual design',
+      category: 'Multi-Page',
+      component: MultiPageTemplate3,
+      features: ['3 pages', 'Purple sidebar', 'Creative design', 'Visual timeline', 'Content-filled'],
+      color: 'from-purple-700 to-indigo-800'
     }
   ];
 
@@ -407,6 +533,7 @@ export default function TemplateGallery() {
                   const selectedTemplateData = templates.find(t => t.id === selectedTemplate);
                   if (selectedTemplateData && selectedTemplateData.component) {
                     const TemplateComponent = selectedTemplateData.component;
+                    // For multi-page templates, show all pages
                     return <TemplateComponent formData={previewData} />;
                   }
                   return null;
