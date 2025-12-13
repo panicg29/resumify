@@ -4,10 +4,6 @@ import { Textarea } from '../components/ui/textarea';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useResumes } from '../hooks/useResumes';
-import IsabelSchumacherTemplate from '../components/templates/IsabelSchumacherTemplate';
-import IsabelSchumacherGlassTemplate from '../components/templates/IsabelSchumacherGlassTemplate';
-import ForestGreenTemplate from '../components/templates/ForestGreenTemplate';
-import NavySidebarTemplate from '../components/templates/NavySidebarTemplate';
 import KorinaVillanuevaTemplate from '../components/templates/KorinaVillanuevaTemplate';
 import RiaanChandranTemplate from '../components/templates/RiaanChandranTemplate';
 import AdoraMontminyTemplate from '../components/templates/AdoraMontminyTemplate';
@@ -17,10 +13,6 @@ import RichardSanchezNewTemplate from '../components/templates/RichardSanchezNew
 import DanielGallegoTemplate from '../components/templates/DanielGallegoTemplate';
 import ClaudiaAlvesTemplate from '../components/templates/ClaudiaAlvesTemplate';
 import BartholomewHendersonTemplate from '../components/templates/BartholomewHendersonTemplate';
-import FranciscoAndradeTemplate from '../components/templates/FranciscoAndradeTemplate';
-import OliviaWilsonTemplate from '../components/templates/OliviaWilsonTemplate';
-import EstelleDarcyTemplate from '../components/templates/EstelleDarcyTemplate';
-import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
@@ -51,17 +43,9 @@ const getTemplateName = (templateId) => {
     'daniel-gallego': 'Daniel Gallego',
     'claudia-alves': 'Claudia Alves',
     'bartholomew-henderson': 'Bartholomew Henderson',
-    'francisco-andrade': 'Francisco Andrade',
-    'olivia-wilson': 'Olivia Wilson',
-    'estelle-darcy': 'Estelle Darcy',
-    'juliana-silva': 'Juliana Silva',
     'catrine-ziv': 'Catrine Ziv',
     'olivia-wilson-dark-blue': 'Olivia Wilson Dark Blue',
     'phylis-flex': 'Phylis Flex',
-    'isabel-schumacher': 'Isabel Schumacher',
-    'isabel-schumacher-glass': 'Isabel Schumacher Glass',
-    'forest-green': 'Forest Green',
-    'navy-sidebar': 'Navy Sidebar',
     'multipage-template-1': 'Multi-Page Professional',
     'multipage-template-2': 'Multi-Page Modern Tech',
     'multipage-template-3': 'Multi-Page Creative'
@@ -122,9 +106,9 @@ export default function Dashboard() {
       } else if (resume.templateId) {
         resumeCopy.template = resume.templateId;
       } else {
-        // If no template found, default to isabel-schumacher
-        resumeCopy.template = 'isabel-schumacher';
-        console.warn(`[handlePreview] No template found for resume ${resume._id}, defaulting to isabel-schumacher`);
+        // If no template found, default to korina-villanueva
+        resumeCopy.template = 'korina-villanueva';
+        console.warn(`[handlePreview] No template found for resume ${resume._id}, defaulting to korina-villanueva`);
       }
     }
     
@@ -202,7 +186,7 @@ export default function Dashboard() {
         email: editableData.email,
         phone: editableData.phone,
         summary: editableData.summary,
-        template: editableData.template || selectedResume.template || 'isabel-schumacher',
+        template: editableData.template || selectedResume.template || 'korina-villanueva',
         education: (editableData.education || []).map(e => ({
           degree: e.degree || '',
           institution: e.institution || '',
@@ -386,15 +370,7 @@ export default function Dashboard() {
       // Template is normalized and ready for use
       
       let TemplateComponent;
-      if (normalizedTemplate === 'isabel-schumacher-glass') {
-        TemplateComponent = IsabelSchumacherGlassTemplate;
-      } else if (normalizedTemplate === 'forest-green') {
-        TemplateComponent = ForestGreenTemplate;
-      } else if (normalizedTemplate === 'navy-sidebar') {
-        TemplateComponent = NavySidebarTemplate;
-      } else if (normalizedTemplate === 'isabel-schumacher') {
-        TemplateComponent = IsabelSchumacherTemplate;
-      } else if (normalizedTemplate === 'korina-villanueva') {
+      if (normalizedTemplate === 'korina-villanueva') {
         TemplateComponent = KorinaVillanuevaTemplate;
       } else if (normalizedTemplate === 'riaan-chandran') {
         TemplateComponent = RiaanChandranTemplate;
@@ -412,14 +388,6 @@ export default function Dashboard() {
         TemplateComponent = ClaudiaAlvesTemplate;
       } else if (normalizedTemplate === 'bartholomew-henderson') {
         TemplateComponent = BartholomewHendersonTemplate;
-      } else if (normalizedTemplate === 'francisco-andrade') {
-        TemplateComponent = FranciscoAndradeTemplate;
-      } else if (normalizedTemplate === 'olivia-wilson') {
-        TemplateComponent = OliviaWilsonTemplate;
-      } else if (normalizedTemplate === 'estelle-darcy') {
-        TemplateComponent = EstelleDarcyTemplate;
-      } else if (normalizedTemplate === 'juliana-silva') {
-        TemplateComponent = JulianaSilvaTemplate;
       } else if (normalizedTemplate === 'catrine-ziv') {
         TemplateComponent = CatrineZivTemplate;
       } else if (normalizedTemplate === 'olivia-wilson-dark-blue') {
@@ -433,9 +401,9 @@ export default function Dashboard() {
       } else if (normalizedTemplate === 'multipage-template-3') {
         TemplateComponent = MultiPageTemplate3;
       } else {
-        // Default fallback to isabel-schumacher if template is missing or invalid
+        // Default fallback to korina-villanueva if template is missing or invalid
         // This handles cases where old resumes don't have a template field
-        TemplateComponent = IsabelSchumacherTemplate;
+        TemplateComponent = KorinaVillanuevaTemplate;
       }
       
       // For multi-page templates, use full data (template handles distribution internally)
@@ -560,15 +528,7 @@ export default function Dashboard() {
     const normalizedTemplate = templateValue ? String(templateValue).trim() : null;
     
     let TemplateComponent;
-    if (normalizedTemplate === 'isabel-schumacher-glass') {
-      TemplateComponent = IsabelSchumacherGlassTemplate;
-    } else if (normalizedTemplate === 'forest-green') {
-      TemplateComponent = ForestGreenTemplate;
-    } else if (normalizedTemplate === 'navy-sidebar') {
-      TemplateComponent = NavySidebarTemplate;
-    } else if (normalizedTemplate === 'isabel-schumacher') {
-      TemplateComponent = IsabelSchumacherTemplate;
-    } else if (normalizedTemplate === 'korina-villanueva') {
+    if (normalizedTemplate === 'korina-villanueva') {
       TemplateComponent = KorinaVillanuevaTemplate;
     } else if (normalizedTemplate === 'riaan-chandran') {
       TemplateComponent = RiaanChandranTemplate;
@@ -586,14 +546,6 @@ export default function Dashboard() {
       TemplateComponent = ClaudiaAlvesTemplate;
     } else if (normalizedTemplate === 'bartholomew-henderson') {
       TemplateComponent = BartholomewHendersonTemplate;
-    } else if (normalizedTemplate === 'francisco-andrade') {
-      TemplateComponent = FranciscoAndradeTemplate;
-    } else if (normalizedTemplate === 'olivia-wilson') {
-      TemplateComponent = OliviaWilsonTemplate;
-    } else if (normalizedTemplate === 'estelle-darcy') {
-      TemplateComponent = EstelleDarcyTemplate;
-    } else if (normalizedTemplate === 'juliana-silva') {
-      TemplateComponent = JulianaSilvaTemplate;
     } else if (normalizedTemplate === 'catrine-ziv') {
       TemplateComponent = CatrineZivTemplate;
     } else if (normalizedTemplate === 'olivia-wilson-dark-blue') {
@@ -607,9 +559,9 @@ export default function Dashboard() {
     } else if (normalizedTemplate === 'multipage-template-3') {
       TemplateComponent = MultiPageTemplate3;
     } else {
-      // Default fallback to isabel-schumacher if template is missing or invalid
+      // Default fallback to korina-villanueva if template is missing or invalid
       // This handles cases where old resumes don't have a template field
-      TemplateComponent = IsabelSchumacherTemplate;
+      TemplateComponent = KorinaVillanuevaTemplate;
     }
 
     // For multi-page templates, the template handles content distribution internally
@@ -984,10 +936,6 @@ export default function Dashboard() {
                       <option value="daniel-gallego" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Daniel Gallego</option>
                       <option value="claudia-alves" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Claudia Alves</option>
                       <option value="bartholomew-henderson" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Bartholomew Henderson</option>
-                      <option value="francisco-andrade" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Francisco Andrade</option>
-                      <option value="olivia-wilson" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Olivia Wilson</option>
-                      <option value="estelle-darcy" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Estelle Darcy</option>
-                      <option value="juliana-silva" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Juliana Silva</option>
                       <option value="catrine-ziv" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Catrine Ziv</option>
                       <option value="olivia-wilson-dark-blue" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Olivia Wilson Dark Blue</option>
                       <option value="phylis-flex" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Phylis Flex</option>

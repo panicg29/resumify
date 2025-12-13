@@ -29,10 +29,6 @@ import RichardSanchezNewTemplate from '../components/templates/RichardSanchezNew
 import DanielGallegoTemplate from '../components/templates/DanielGallegoTemplate';
 import ClaudiaAlvesTemplate from '../components/templates/ClaudiaAlvesTemplate';
 import BartholomewHendersonTemplate from '../components/templates/BartholomewHendersonTemplate';
-import FranciscoAndradeTemplate from '../components/templates/FranciscoAndradeTemplate';
-import OliviaWilsonTemplate from '../components/templates/OliviaWilsonTemplate';
-import EstelleDarcyTemplate from '../components/templates/EstelleDarcyTemplate';
-import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
@@ -91,30 +87,6 @@ const templateOptions = [
     name: 'Bartholomew Henderson',
     descriptor: 'Dark blue sidebar with white main',
     accent: 'from-blue-900 to-blue-950'
-  },
-  {
-    id: 'francisco-andrade',
-    name: 'Francisco Andrade',
-    descriptor: 'Light gray sidebar with dark blue header',
-    accent: 'from-blue-700 to-blue-900'
-  },
-  {
-    id: 'olivia-wilson',
-    name: 'Olivia Wilson',
-    descriptor: 'Elegant two-column with light peach/beige sidebar',
-    accent: 'from-purple-700 to-purple-900'
-  },
-  {
-    id: 'estelle-darcy',
-    name: 'Estelle Darcy',
-    descriptor: 'Clean two-column with light grey sidebar',
-    accent: 'from-gray-400 to-gray-600'
-  },
-  {
-    id: 'juliana-silva',
-    name: 'Juliana Silva',
-    descriptor: 'Elegant two-column with light peach/beige sidebar',
-    accent: 'from-amber-300 to-amber-500'
   },
   {
     id: 'catrine-ziv',
@@ -256,10 +228,6 @@ export default function JobTailoredResume() {
       case 'daniel-gallego': return DanielGallegoTemplate;
       case 'claudia-alves': return ClaudiaAlvesTemplate;
       case 'bartholomew-henderson': return BartholomewHendersonTemplate;
-      case 'francisco-andrade': return FranciscoAndradeTemplate;
-      case 'olivia-wilson': return OliviaWilsonTemplate;
-      case 'estelle-darcy': return EstelleDarcyTemplate;
-      case 'juliana-silva': return JulianaSilvaTemplate;
       case 'catrine-ziv': return CatrineZivTemplate;
       case 'olivia-wilson-dark-blue': return OliviaWilsonDarkBlueTemplate;
       case 'phylis-flex': return PhylisFlexTemplate;

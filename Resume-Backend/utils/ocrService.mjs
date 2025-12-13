@@ -40,10 +40,12 @@ export const validateFileType = (file) => {
     'image/bmp',
     'image/tiff',
     'image/tif',
-    'application/pdf'
+    'application/pdf',
+    'application/msword', // .doc
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
   ];
   
-  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.pdf'];
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.pdf', '.doc', '.docx'];
   
   const fileExtension = file.originalname
     .toLowerCase()

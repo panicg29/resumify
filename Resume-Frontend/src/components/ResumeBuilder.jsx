@@ -23,10 +23,6 @@ import RichardSanchezNewTemplate from './templates/RichardSanchezNewTemplate';
 import DanielGallegoTemplate from './templates/DanielGallegoTemplate';
 import ClaudiaAlvesTemplate from './templates/ClaudiaAlvesTemplate';
 import BartholomewHendersonTemplate from './templates/BartholomewHendersonTemplate';
-import FranciscoAndradeTemplate from './templates/FranciscoAndradeTemplate';
-import OliviaWilsonTemplate from './templates/OliviaWilsonTemplate';
-import EstelleDarcyTemplate from './templates/EstelleDarcyTemplate';
-import JulianaSilvaTemplate from './templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from './templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from './templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from './templates/PhylisFlexTemplate';
@@ -727,14 +723,6 @@ const ResumeBuilder = () => {
         return <ClaudiaAlvesTemplate formData={templateData} />;
       case 'bartholomew-henderson':
         return <BartholomewHendersonTemplate formData={templateData} />;
-      case 'francisco-andrade':
-        return <FranciscoAndradeTemplate formData={templateData} />;
-      case 'olivia-wilson':
-        return <OliviaWilsonTemplate formData={templateData} />;
-      case 'estelle-darcy':
-        return <EstelleDarcyTemplate formData={templateData} />;
-      case 'juliana-silva':
-        return <JulianaSilvaTemplate formData={templateData} />;
       case 'catrine-ziv':
         return <CatrineZivTemplate formData={templateData} />;
       case 'olivia-wilson-dark-blue':
@@ -766,10 +754,6 @@ const ResumeBuilder = () => {
                   { id: 'daniel-gallego', name: 'Daniel Gallego', color: 'from-gray-600 to-gray-800', desc: 'Single column with grey header bars' },
                   { id: 'claudia-alves', name: 'Claudia Alves', color: 'from-amber-800 to-amber-900', desc: 'Dark brown sidebar with light beige main' },
                   { id: 'bartholomew-henderson', name: 'Bartholomew Henderson', color: 'from-blue-900 to-blue-950', desc: 'Dark blue sidebar with white main' },
-                  { id: 'francisco-andrade', name: 'Francisco Andrade', color: 'from-blue-700 to-blue-900', desc: 'Light gray sidebar with dark blue header' },
-                  { id: 'olivia-wilson', name: 'Olivia Wilson', color: 'from-purple-700 to-purple-900', desc: 'Elegant two-column with light peach/beige sidebar' },
-                  { id: 'estelle-darcy', name: 'Estelle Darcy', color: 'from-gray-400 to-gray-600', desc: 'Clean two-column with light grey sidebar' },
-                  { id: 'juliana-silva', name: 'Juliana Silva', color: 'from-amber-300 to-amber-500', desc: 'Elegant two-column with light peach/beige sidebar' },
                   { id: 'catrine-ziv', name: 'Catrine Ziv', color: 'from-green-700 to-green-900', desc: 'Professional two-column with dark green-grey sidebar' },
                   { id: 'olivia-wilson-dark-blue', name: 'Olivia Wilson Dark Blue', color: 'from-blue-800 to-blue-900', desc: 'Professional two-column with dark blue-grey sidebar' },
                   { id: 'phylis-flex', name: 'Phylis Flex', color: 'from-gray-300 to-gray-500', desc: 'Clean design with light gray header' }
