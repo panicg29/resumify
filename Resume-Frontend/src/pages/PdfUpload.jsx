@@ -511,7 +511,7 @@ Check backend console for errors.`;
                 📄 Upload Resume File
               </h1>
               <p className="text-base md:text-lg text-gray-400">
-                Upload your resume (PDF or image) and let AI extract the information using OCR
+                Upload your resume (PDF, DOC, DOCX, or image) and let AI extract the information
               </p>
             </div>
 
@@ -525,7 +525,7 @@ Check backend console for errors.`;
                       Upload Your Resume
                     </h2>
                     <p className="text-sm md:text-base text-gray-400 mt-2">
-                      Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TIFF • Maximum size: 10MB • Processing time: 5-30 seconds
+                      Supported formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF, BMP, TIFF • Maximum size: 10MB • Processing time: 5-30 seconds
                     </p>
                   </div>
 
@@ -765,7 +765,7 @@ Check backend console for errors.`;
                   <ol className="space-y-2 text-sm text-gray-300">
                     <li className="flex items-start">
                       <span className="font-bold text-cyan-400 mr-2">1.</span>
-                      <span>Upload your resume file (PDF or image: JPG, PNG, GIF, BMP, TIFF)</span>
+                      <span>Upload your resume file (PDF, DOC, DOCX, or image: JPG, PNG, GIF, BMP, TIFF)</span>
                     </li>
                     <li className="flex items-start">
                       <span className="font-bold text-cyan-400 mr-2">2.</span>

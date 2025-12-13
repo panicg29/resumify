@@ -1,16 +1,21 @@
 /**
  * OCR Service Utility
  * Uses OCR.Space API wrapper to extract text from images and PDFs
+ * Extracts text directly from Word documents (.doc, .docx) using mammoth
  * 
  * Features:
  * - File upload OCR (via multipart/form-data)
  * - URL-based OCR (via remote file URL)
+ * - Direct text extraction from Word documents
  * - Language selection support
  * - Comprehensive error handling
  * - Sensitive data protection in logs
  */
 
 import { ocrSpace } from 'ocr-space-api-wrapper';
+import mammoth from 'mammoth';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Get API key from environment
@@ -139,7 +144,56 @@ const sanitizeResponse = (response) => {
 };
 
 /**
- * Extract text from file upload using OCR.Space
+ * Extract text from Word document (.docx) using mammoth
+ * Note: .doc files (older format) are not supported by mammoth
+ * @param {string} filePath - Path to the Word document
+ * @param {string} fileExtension - File extension (.doc or .docx)
+ * @returns {Promise<string>} Extracted text
+ */
+const extractTextFromWordDocument = async (filePath, fileExtension) => {
+  try {
+    // Check if it's .doc (older format) - mammoth only supports .docx
+    if (fileExtension === '.doc') {
+      throw new Error('Legacy .doc format is not supported. Please convert your file to .docx format or upload as PDF.');
+    }
+    
+    console.log('📄 Extracting text from Word document (.docx) using mammoth...');
+    const result = await mammoth.extractRawText({ path: filePath });
+    const extractedText = result.value || '';
+    
+    if (result.messages && result.messages.length > 0) {
+      console.warn('⚠️  Mammoth warnings:', result.messages);
+    }
+    
+    console.log(`✅ Extracted ${extractedText.length} characters from Word document`);
+    return extractedText.trim();
+  } catch (error) {
+    console.error('❌ Error extracting text from Word document:', error.message);
+    throw new Error(`Failed to extract text from Word document: ${error.message}`);
+  }
+};
+
+/**
+ * Check if file is a Word document
+ * @param {Object} file - Multer file object
+ * @returns {boolean} True if file is a Word document
+ */
+const isWordDocument = (file) => {
+  const wordMimeTypes = [
+    'application/msword', // .doc
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+  ];
+  
+  const wordExtensions = ['.doc', '.docx'];
+  const fileExtension = file.originalname
+    .toLowerCase()
+    .substring(file.originalname.lastIndexOf('.'));
+  
+  return wordMimeTypes.includes(file.mimetype) || wordExtensions.includes(fileExtension);
+};
+
+/**
+ * Extract text from file upload using OCR.Space (for images/PDFs) or direct extraction (for Word docs)
  * @param {Object} file - Multer file object
  * @param {Object} options - OCR options (language, OCREngine, etc.)
  * @returns {Promise<Object>} OCR result with extracted text and raw response
@@ -149,14 +203,41 @@ export const extractTextFromFile = async (file, options = {}) => {
     // Validate file type
     validateFileType(file);
     
+    // Prepare file path
+    const filePath = file.path;
+    
+    // Check if file is a Word document
+    if (isWordDocument(file)) {
+      // Extract text directly from Word document (no OCR needed)
+      const fileExtension = file.originalname
+        .toLowerCase()
+        .substring(file.originalname.lastIndexOf('.'));
+      
+      console.log('📝 Detected Word document, extracting text directly...');
+      const extractedText = await extractTextFromWordDocument(filePath, fileExtension);
+      
+      return {
+        success: true,
+        extractedText,
+        rawResponse: {
+          method: 'mammoth',
+          fileType: 'word-document',
+          extension: fileExtension
+        },
+        fileInfo: {
+          originalName: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size
+        }
+      };
+    }
+    
+    // For images and PDFs, use OCR.Space
     // Validate and sanitize options
     const ocrOptions = validateOCROptions(options);
     
     // Get API key
     const apiKey = getAPIKey();
-    
-    // Prepare file path for OCR
-    const filePath = file.path;
     
     // Perform OCR using the function-based API
     const rawResponse = await ocrSpace(filePath, {
