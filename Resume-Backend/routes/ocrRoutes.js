@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter for OCR - allow images and PDFs
+// File filter for OCR - allow images, PDFs, and Word documents
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = [
     'image/jpeg',
@@ -37,10 +37,12 @@ const fileFilter = (req, file, cb) => {
     'image/bmp',
     'image/tiff',
     'image/tif',
-    'application/pdf'
+    'application/pdf',
+    'application/msword', // .doc
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
   ];
   
-  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.pdf'];
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.pdf', '.doc', '.docx'];
   const fileExtension = file.originalname
     .toLowerCase()
     .substring(file.originalname.lastIndexOf('.'));

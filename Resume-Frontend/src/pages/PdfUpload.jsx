@@ -15,10 +15,6 @@ import RichardSanchezNewTemplate from '../components/templates/RichardSanchezNew
 import DanielGallegoTemplate from '../components/templates/DanielGallegoTemplate';
 import ClaudiaAlvesTemplate from '../components/templates/ClaudiaAlvesTemplate';
 import BartholomewHendersonTemplate from '../components/templates/BartholomewHendersonTemplate';
-import FranciscoAndradeTemplate from '../components/templates/FranciscoAndradeTemplate';
-import OliviaWilsonTemplate from '../components/templates/OliviaWilsonTemplate';
-import EstelleDarcyTemplate from '../components/templates/EstelleDarcyTemplate';
-import JulianaSilvaTemplate from '../components/templates/JulianaSilvaTemplate';
 import CatrineZivTemplate from '../components/templates/CatrineZivTemplate';
 import OliviaWilsonDarkBlueTemplate from '../components/templates/OliviaWilsonDarkBlueTemplate';
 import PhylisFlexTemplate from '../components/templates/PhylisFlexTemplate';
@@ -51,10 +47,6 @@ export default function PdfUpload() {
     { id: 'daniel-gallego', name: 'Daniel Gallego', color: 'from-gray-600 to-gray-800', desc: 'Single column with grey header bars' },
     { id: 'claudia-alves', name: 'Claudia Alves', color: 'from-amber-800 to-amber-900', desc: 'Dark brown sidebar with light beige main' },
     { id: 'bartholomew-henderson', name: 'Bartholomew Henderson', color: 'from-blue-900 to-blue-950', desc: 'Dark blue sidebar with white main' },
-    { id: 'francisco-andrade', name: 'Francisco Andrade', color: 'from-blue-700 to-blue-900', desc: 'Light gray sidebar with dark blue header' },
-    { id: 'olivia-wilson', name: 'Olivia Wilson', color: 'from-purple-700 to-purple-900', desc: 'Elegant two-column with light peach/beige sidebar' },
-    { id: 'estelle-darcy', name: 'Estelle Darcy', color: 'from-gray-400 to-gray-600', desc: 'Clean two-column with light grey sidebar' },
-    { id: 'juliana-silva', name: 'Juliana Silva', color: 'from-amber-300 to-amber-500', desc: 'Elegant two-column with light peach/beige sidebar' },
     { id: 'catrine-ziv', name: 'Catrine Ziv', color: 'from-green-700 to-green-900', desc: 'Professional two-column with dark green-grey sidebar' },
     { id: 'olivia-wilson-dark-blue', name: 'Olivia Wilson Dark Blue', color: 'from-blue-800 to-blue-900', desc: 'Professional two-column with dark blue-grey sidebar' },
     { id: 'phylis-flex', name: 'Phylis Flex', color: 'from-gray-300 to-gray-500', desc: 'Clean design with light gray header' }
@@ -257,10 +249,6 @@ export default function PdfUpload() {
       case 'daniel-gallego': return DanielGallegoTemplate;
       case 'claudia-alves': return ClaudiaAlvesTemplate;
       case 'bartholomew-henderson': return BartholomewHendersonTemplate;
-      case 'francisco-andrade': return FranciscoAndradeTemplate;
-      case 'olivia-wilson': return OliviaWilsonTemplate;
-      case 'estelle-darcy': return EstelleDarcyTemplate;
-      case 'juliana-silva': return JulianaSilvaTemplate;
       case 'catrine-ziv': return CatrineZivTemplate;
       case 'olivia-wilson-dark-blue': return OliviaWilsonDarkBlueTemplate;
       case 'phylis-flex': return PhylisFlexTemplate;
@@ -523,7 +511,7 @@ Check backend console for errors.`;
                 📄 Upload Resume File
               </h1>
               <p className="text-base md:text-lg text-gray-400">
-                Upload your resume (PDF or image) and let AI extract the information using OCR
+                Upload your resume (PDF, DOC, DOCX, or image) and let AI extract the information
               </p>
             </div>
 
@@ -537,7 +525,7 @@ Check backend console for errors.`;
                       Upload Your Resume
                     </h2>
                     <p className="text-sm md:text-base text-gray-400 mt-2">
-                      Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TIFF • Maximum size: 10MB • Processing time: 5-30 seconds
+                      Supported formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF, BMP, TIFF • Maximum size: 10MB • Processing time: 5-30 seconds
                     </p>
                   </div>
 
@@ -777,7 +765,7 @@ Check backend console for errors.`;
                   <ol className="space-y-2 text-sm text-gray-300">
                     <li className="flex items-start">
                       <span className="font-bold text-cyan-400 mr-2">1.</span>
-                      <span>Upload your resume file (PDF or image: JPG, PNG, GIF, BMP, TIFF)</span>
+                      <span>Upload your resume file (PDF, DOC, DOCX, or image: JPG, PNG, GIF, BMP, TIFF)</span>
                     </li>
                     <li className="flex items-start">
                       <span className="font-bold text-cyan-400 mr-2">2.</span>
